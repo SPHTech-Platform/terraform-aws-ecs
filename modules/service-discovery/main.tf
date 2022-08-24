@@ -1,6 +1,6 @@
 resource "aws_service_discovery_private_dns_namespace" "this" {
-  count       = var.enable_service_discovery ? 1 : 0
-  
+  count = var.enable_service_discovery ? 1 : 0
+
   name        = var.internal_dns_name
   description = "Private DNS namespace for ECS services"
   vpc         = var.vpc_id
