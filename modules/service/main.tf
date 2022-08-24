@@ -16,9 +16,10 @@ resource "aws_ecs_task_definition" "this" {
   requires_compatibilities = [var.launch_type]
   cpu                      = var.launch_type == "FARGATE" ? var.task_cpu : null
   memory                   = var.launch_type == "FARGATE" ? var.task_memory : null
-  execution_role_arn       = var.execution_role_arn
-  task_role_arn            = var.task_role_arn
-  network_mode             = var.network_mode
+  #checkov:skip=CKV_AWS_249:"Ensure that the Execution Role ARN and the Task Role ARN are different in ECS Task definitions"
+  execution_role_arn = var.execution_role_arn
+  task_role_arn      = var.task_role_arn
+  network_mode       = var.network_mode
 
   dynamic "volume" {
     for_each = local.volumes
@@ -42,8 +43,9 @@ resource "aws_ecs_task_definition" "this" {
         for_each = lookup(volume.value, "efs_volume_configuration", [])
 
         content {
-          file_system_id          = lookup(efs_volume_configuration.value, "file_system_id", null)
-          root_directory          = lookup(efs_volume_configuration.value, "root_directory", null)
+          file_system_id = lookup(efs_volume_configuration.value, "file_system_id", null)
+          root_directory = lookup(efs_volume_configuration.value, "root_directory", null)
+          #checkov:skip=CKV_AWS_97:"Ensure Encryption in transit is enabled for EFS volumes in ECS Task definitions"
           transit_encryption      = lookup(efs_volume_configuration.value, "transit_encryption", "ENABLED")
           transit_encryption_port = lookup(efs_volume_configuration.value, "transit_encryption_port", 2999)
           dynamic "authorization_config" {
