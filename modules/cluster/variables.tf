@@ -46,6 +46,18 @@ variable "capacity_provider_name" {
   default     = ""
 }
 
+variable "capacity_providers" {
+  description = "List of short names of one or more capacity providers to associate with the cluster. Valid values also include FARGATE and FARGATE_SPOT."
+  type        = list(string)
+  default     = []
+}
+
+variable "key_admin_arn" {
+  description = "Key administrator principal for the KMS key"
+  type        = string
+  default     = ""
+}
+
 variable "tags" {
   description = "AWS tags to be applied to resources"
   type        = map(string)

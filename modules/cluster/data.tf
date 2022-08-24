@@ -10,7 +10,7 @@ data "aws_iam_policy_document" "cloudwatch_logs_allow_kms" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
+        length(var.key_admin_arn) == 0 ? "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root" : "${var.key_admin_arn}"
       ]
     }
 

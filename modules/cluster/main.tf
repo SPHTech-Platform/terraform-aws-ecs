@@ -46,7 +46,7 @@ resource "aws_ecs_cluster_capacity_providers" "this" {
   count = var.create_capacity_provider ? 1 : 0
 
   cluster_name       = aws_ecs_cluster.this.name
-  capacity_providers = [try(aws_ecs_capacity_provider.this[0].name, null)]
+  capacity_providers = var.create_ecs_asg_capacity_provider ? [try(aws_ecs_capacity_provider.this[0].name, null)] : var.capacity_providers
 
   dynamic "default_capacity_provider_strategy" {
     for_each = length(var.asg_arn) == 0 ? var.default_capacity_provider_strategy : []
