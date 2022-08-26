@@ -58,40 +58,6 @@ variable "key_admin_arn" {
   default     = ""
 }
 
-##############################
-# Tagging
-##############################
-variable "standard_tags" {
-  description = "Standard tags. If value is not applicable leave as empty or null."
-  type = object({
-    env         = string
-    app_tier    = string
-    appteam     = string
-    biz_dept    = string
-    cost_centre = string
-    product     = string
-  })
-
-  validation {
-    condition = alltrue([
-      for _tagkey, tagvalue in var.standard_tags : can(regex("^[A-Za-z0-9? _.:/=+@-]+$", tagvalue))
-    ])
-    error_message = "Invalid tag value. Tag values for AWS accounts can only contain alphanumeric characters, spaces, and any of the following characters within the double quotes \"_.:/=+@-\"."
-  }
-}
-
-variable "map_migrated" {
-  description = "Map-migrated discount code"
-  type        = string
-  default     = "d-server-00fyc0pr7gc8hv"
-}
-
-variable "tags" {
-  description = "AWS tags to be applied to resources"
-  type        = map(string)
-  default     = {}
-}
-
 variable "asg_arn" {
   description = "Autoscaling Group ARN"
   type        = string
@@ -150,4 +116,13 @@ variable "ecs_encrypt_logs" {
   description = "Enable encryption for cloudwatch logs"
   type        = bool
   default     = true
+}
+
+##############################
+# Tagging
+##############################
+variable "tags" {
+  description = "AWS tags to be applied to resources"
+  type        = map(string)
+  default     = {}
 }

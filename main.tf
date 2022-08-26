@@ -1,6 +1,21 @@
 locals {
   name = "awsdio-nextjs"
 
+  mandatory_tags = {
+    env         = "dev"
+    app_tier    = "2"
+    appteam     = "SPH Radio Agile Team"
+    cost_centre = "4000"
+    product     = "SPH Radio"
+    biz_dept    = "DPE"
+  }
+
+  map_migrated = "d-server-00fyc0pr7gc8hv"
+
+  standard_tags = merge(
+    { for k, v in local.mandatory_tags : "sph:${replace(k, "_", "-")}" => v if v != null && v != "" },
+    { map-migrated = local.map_migrated },
+  )
 }
 
 module "ecs_cluster" {
@@ -26,17 +41,8 @@ module "ecs_cluster" {
   #   asg_iam_instance_profile_arn          = var.iam_instance_profile_arn
   #   tags                                  = local.standard_tags
 
-  # tags
-  standard_tags = {
-    env         = "dev"
-    app_tier    = "2"
-    appteam     = "SPH Radio Agile Team"
-    cost_centre = "4000"
-    product     = "SPH Radio"
-    biz_dept    = "DPE"
-  }
-
-  map_migrated = "d-server-00fyc0pr7gc8hv"
+  tags = local.standard_tags
+  
 }
 
 data "aws_ssm_parameter" "vpc_id" {
@@ -71,12 +77,5 @@ resource "aws_security_group" "asg_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = {
-    env         = "dev"
-    app_tier    = "2"
-    appteam     = "SPH Radio Agile Team"
-    cost_centre = "4000"
-    product     = "SPH Radio"
-    biz_dept    = "DPE"
-  }
+  tags = local.standard_tags
 }

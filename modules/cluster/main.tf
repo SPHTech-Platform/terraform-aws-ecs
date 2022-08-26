@@ -1,10 +1,6 @@
 locals {
   log_group_name = var.log_group_name == "" ? "/aws/ecs/${format("ecs-%s", var.name)}" : var.log_group_name
   asg_cap_name   = format("asg-%s", format("ecs-%s", var.name))
-  standard_tags = merge(
-    { for k, v in var.standard_tags : "sph:${replace(k, "_", "-")}" => v if v != null && v != "" },
-    { map-migrated = var.map_migrated },
-  )
 }
 
 resource "aws_cloudwatch_log_group" "this" {
@@ -13,7 +9,7 @@ resource "aws_cloudwatch_log_group" "this" {
   name              = local.log_group_name
   retention_in_days = var.log_retention
   kms_key_id        = aws_kms_key.cloudwatch.arn
-  tags              = merge(local.standard_tags, { "Name" = local.log_group_name })
+  tags              = merge(var.tags, { "Name" = local.log_group_name })
 }
 
 resource "aws_kms_key" "cloudwatch" {
@@ -43,7 +39,7 @@ resource "aws_ecs_capacity_provider" "this" {
       target_capacity           = var.scaling_target_capacity
     }
   }
-  tags = merge(local.standard_tags, { "Name" : local.asg_cap_name })
+  tags = merge(var.tags, { "Name" : local.asg_cap_name })
 }
 
 resource "aws_ecs_cluster_capacity_providers" "this" {
@@ -81,5 +77,5 @@ resource "aws_ecs_cluster" "this" {
       }
     }
   }
-  tags = merge(local.standard_tags, { "Name" : var.ecs_cluster_name })
+  tags = merge(var.tags, { "Name" : var.ecs_cluster_name })
 }
