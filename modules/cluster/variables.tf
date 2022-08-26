@@ -22,8 +22,8 @@ variable "log_encryption_enabled" {
   default     = false
 }
 
-variable "create_ecs_asg_capacity_provider" {
-  description = "Specify whether to create autoscaling based capacity provider"
+variable "link_ecs_to_asg_capacity_provider" {
+  description = "Specify whether link ECS to autoscaling group capacity provider"
   type        = bool
   default     = false
 }
@@ -31,7 +31,7 @@ variable "create_ecs_asg_capacity_provider" {
 variable "create_capacity_provider" {
   description = "Specify whether to create autoscaling based capacity provider"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "default_capacity_provider_strategy" {
@@ -56,6 +56,34 @@ variable "key_admin_arn" {
   description = "Key administrator principal for the KMS key"
   type        = string
   default     = ""
+}
+
+##############################
+# Tagging
+##############################
+variable "standard_tags" {
+  description = "Standard tags. If value is not applicable leave as empty or null."
+  type = object({
+    env         = string
+    app_tier    = string
+    appteam     = string
+    biz_dept    = string
+    cost_centre = string
+    product     = string
+  })
+
+  validation {
+    condition = alltrue([
+      for _tagkey, tagvalue in var.standard_tags : can(regex("^[A-Za-z0-9? _.:/=+@-]+$", tagvalue))
+    ])
+    error_message = "Invalid tag value. Tag values for AWS accounts can only contain alphanumeric characters, spaces, and any of the following characters within the double quotes \"_.:/=+@-\"."
+  }
+}
+
+variable "map_migrated" {
+  description = "Map-migrated discount code"
+  type        = string
+  default     = "d-server-00fyc0pr7gc8hv"
 }
 
 variable "tags" {
@@ -102,6 +130,12 @@ variable "scaling_target_capacity" {
 
 variable "ecs_cluster_name" {
   description = "Name of the ecs cluster"
+  type        = string
+  default     = null
+}
+
+variable "name" {
+  description = "Name of the product/project/application"
   type        = string
   default     = null
 }
