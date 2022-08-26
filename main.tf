@@ -1,7 +1,12 @@
+locals {
+  name = "awsdio-nextjs"
+
+}
+
 module "ecs_cluster" {
   source = "./modules/ecs"
 
-  name                              = "awedio-nextjs"
+  name                              = format("%s-ecs", local.name)
   link_ecs_to_asg_capacity_provider = true
   # asg_arn                          = module.asg.autoscaling_group_arn
 
@@ -13,7 +18,7 @@ module "ecs_cluster" {
   asg_max_size         = "4"
   asg_desired_capacity = "2"
   #   asg_subnets                           = var.asg_subnets         #get from ssm parameters
-  asg_network_interface_security_groups = ["asd"]                 #get from ssm parameters
+  asg_network_interface_security_groups = [aws_security_group.asg_sg.id]
   asg_image_id                          = "ami-01f890f0ede139c03" # bottlerocket AMI
   asg_instance_type                     = "m5.2xlarge"
   asg_volume_size                       = "30"
@@ -34,14 +39,16 @@ module "ecs_cluster" {
   map_migrated = "d-server-00fyc0pr7gc8hv"
 }
 
+data "aws_ssm_parameter" "vpc_id" {
+  name = "/aft/provisioned/vpc/vpc_id"
+}
 
-
-resource "aws_security_group" "asg" {
-  name        = "asg"
+resource "aws_security_group" "asg_sg" {
+  name        = format("%s-sg", local.name)
   description = "Allow inbound traffic"
-  vpc_id      = "asdf"
+  vpc_id      = data.aws_ssm_parameter.vpc_id.value
 
-  ingress {
+  ingress { # ingress from load balancer
     description = "Ingress from HTTP"
     from_port   = 80
     to_port     = 80
@@ -49,7 +56,7 @@ resource "aws_security_group" "asg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
+  ingress { # ingress from load balancer
     description = "Ingress from HTTPS"
     from_port   = 443
     to_port     = 443
@@ -65,7 +72,11 @@ resource "aws_security_group" "asg" {
   }
 
   tags = {
-    Name = "allow_tls"
+    env         = "dev"
+    app_tier    = "2"
+    appteam     = "SPH Radio Agile Team"
+    cost_centre = "4000"
+    product     = "SPH Radio"
+    biz_dept    = "DPE"
   }
 }
-

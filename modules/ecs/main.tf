@@ -1,9 +1,9 @@
-module "ssm" {
-  source = "../ssm"
+# module "ssm" {
+#   source = "../ssm"
 
-  standard_tags = var.standard_tags
-  map_migrated  = var.map_migrated
-}
+#   standard_tags = var.standard_tags
+#   map_migrated  = var.map_migrated
+# }
 
 module "autoscaling_group" {
   source = "../autoscaling-group"
@@ -49,6 +49,7 @@ module "cluster" {
 # module "service_discovery" {
 #   source = "./service-discovery"
 # }
+
 
 
 
