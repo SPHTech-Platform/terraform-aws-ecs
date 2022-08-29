@@ -22,6 +22,12 @@ variable "asg_create" {
   default     = false
 }
 
+variable "asg_name" {
+  description = "Name of ASG resource"
+  type        = bool
+  default     = false
+}
+
 variable "asg_instance_name" {
   description = "Name that is propogated to launched EC2 instances via a tag - if not provided, defaults to `var.name`"
   type        = string
@@ -74,6 +80,27 @@ variable "asg_subnets" {
   description = "A list of subnet IDs to launch resources in. Subnets automatically determine which availability zones the group will reside. Conflicts with `availability_zones`"
   type        = list(string)
   default     = null
+}
+
+################################################################################
+# Autoscaling group - policy
+################################################################################
+variable "min_capacity" {
+  description = "Minimum capacity of ECS autoscaling target, cannot be more than max_capacity"
+  type        = number
+  default     = 1
+}
+
+variable "max_capacity" {
+  description = "Maximum capacity of ECS autoscaling target, cannot be less than min_capacity"
+  type        = number
+  default     = 4
+}
+
+variable "target_cpu_value" {
+  description = "Autoscale when CPU Usage value over the specified value. Must be specified if `enable_cpu_based_autoscaling` is `true`."
+  type        = number
+  default     = 70
 }
 
 ################################################################################

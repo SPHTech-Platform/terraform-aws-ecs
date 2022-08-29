@@ -1,32 +1,50 @@
-# module "ssm" {
-#   source = "../ssm"
-
-#   standard_tags = var.standard_tags
-#   map_migrated  = var.map_migrated
-# }
-
 module "autoscaling_group" {
   source = "../autoscaling-group"
 
-  create                            = var.asg_create
-  name                              = var.name
-  instance_name                     = var.asg_instance_name
-  min_size                          = var.asg_min_size
-  max_size                          = var.asg_max_size
-  desired_capacity                  = var.asg_desired_capacity
+  create = var.asg_create
+
+  name          = var.asg_name
+  instance_name = var.asg_instance_name
+
+  min_size                        = var.asg_min_size
+  max_size                        = var.asg_max_size
+  desired_capacity                = var.asg_desired_capacity
+  ignore_desired_capacity_changes = var.asg_ignore_desired_capacity_changes
+  wait_for_capacity_timeout       = var.asg_wait_for_capacity_timeout
+  protect_from_scale_in           = var.asg_protect_from_scale_in
+  health_check_type               = var.asg_health_check_type
+
+  launch_template_description = var.asg_launch_template_description
+  image_id                    = var.asg_image_id
+  instance_type               = var.asg_instance_type
+  ebs_optimized               = var.asg_ebs_optimized
+  enable_monitoring           = var.asg_enable_monitoring
+  enabled_metrics             = var.asg_enabled_metrics
+  user_data_base64            = var.asg_user_data_base64
+  volume_size                 = var.asg_volume_size
+
+  iam_instance_profile_arn = var.asg_iam_instance_profile_arn
+
   subnets                           = var.asg_subnets
   network_interface_security_groups = var.asg_network_interface_security_groups
-  image_id                          = var.asg_image_id
-  instance_type                     = var.asg_instance_type
-  volume_size                       = var.asg_volume_size
-  user_data_base64                  = var.asg_user_data_base64
-  iam_instance_profile_arn          = var.asg_iam_instance_profile_arn
+  placement                         = var.asg_placement
 
   tags = var.tags
 }
 
-# module "autoscaling_policy" {
+# module "ecs_cpu_autoscaling_policy" {
+#   # for_each = { for k, v in local.service_map : k => v if v.service_scaling }
+
 #   source = "../autoscaling-policy"
+
+#   name                             = var.name
+#   enable_ecs_cpu_based_autoscaling = true
+#   min_capacity                     = var.min_capacity
+#   max_capacity                     = var.max_capacity
+#   ecs_cluster_name                 = module.cluster.ecs_cluster_name
+#   # ecs_service_name                 = module.ecs_service[each.key].ecs_service_name
+#   ecs_service_name                 = module.ecs_service[each.key].ecs_service_name
+#   target_cpu_value                 = var.target_cpu_value
 # }
 
 module "cluster" {
@@ -34,9 +52,8 @@ module "cluster" {
 
   name                              = var.name
   link_ecs_to_asg_capacity_provider = var.link_ecs_to_asg_capacity_provider
-  # asg_arn                          = module.asg.autoscaling_group_arn
+  asg_arn                           = module.autoscaling_group.autoscaling_group_arn
 
-  # tags
   tags = var.tags
 }
 
@@ -150,16 +167,6 @@ module "cluster" {
 #   }
 # }
 
-# module "ecs_cluster" {
-#   source                           = "./modules/cluster"
-#   ecs_cluster_name                 = format("ecs-%s", var.name)
-#   termination_protection           = true
-#   create_capacity_provider         = true
-#   create_ecs_asg_capacity_provider = true
-#     asg_arn                          = module.asg.autoscaling_group_arn
-#     tags                             = var.tags
-# }
-
 # module "ecs_service" {
 #   for_each = { for k, v in local.service_map : k => v if v.create }
 
@@ -179,16 +186,3 @@ module "cluster" {
 #   tags               = { "Name" : var.name }
 # }
 
-# module "ecs_cpu_based_autoscaling" {
-#   for_each = { for k, v in local.service_map : k => v if v.service_scaling }
-
-#   source = "./modules/autoscaling"
-
-#   name                             = var.name
-#   enable_ecs_cpu_based_autoscaling = true
-#   min_capacity                     = var.min_capacity
-#   max_capacity                     = var.max_capacity
-#   ecs_cluster_name                 = module.ecs_cluster.ecs_cluster_name
-#   ecs_service_name                 = module.ecs_service[each.key].ecs_service_name
-#   target_cpu_value                 = var.target_cpu_value
-# }
