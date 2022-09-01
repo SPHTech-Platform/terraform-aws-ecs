@@ -13,6 +13,33 @@ variable "link_ecs_to_asg_capacity_provider" {
   default     = false
 }
 
+##############################
+# ECS - service
+##############################
+variable "task_cpu" {
+  description = "Number of cpu units used by the task. If the requires_compatibilities is FARGATE this field is required."
+  type        = number
+  default     = 256
+}
+
+variable "task_memory" {
+  description = "Amount (in MiB) of memory used by the task. If the requires_compatibilities is FARGATE this field is required."
+  type        = number
+  default     = 512
+}
+
+variable "desired_count" {
+  description = "Number of instances of the task definition to place and keep running. "
+  default     = 1
+  type        = number
+}
+
+variable "service_map" {
+  description = "A map of services to deploy"
+  type = map
+  default = {}
+}
+
 ################################################################################
 # Autoscaling group
 ################################################################################
@@ -24,8 +51,8 @@ variable "asg_create" {
 
 variable "asg_name" {
   description = "Name of ASG resource"
-  type        = bool
-  default     = false
+  type        = string
+  default     = ""
 }
 
 variable "asg_instance_name" {

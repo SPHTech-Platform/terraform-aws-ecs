@@ -32,21 +32,6 @@ module "autoscaling_group" {
   tags = var.tags
 }
 
-# module "ecs_cpu_autoscaling_policy" {
-#   # for_each = { for k, v in local.service_map : k => v if v.service_scaling }
-
-#   source = "../autoscaling-policy"
-
-#   name                             = var.name
-#   enable_ecs_cpu_based_autoscaling = true
-#   min_capacity                     = var.min_capacity
-#   max_capacity                     = var.max_capacity
-#   ecs_cluster_name                 = module.cluster.ecs_cluster_name
-#   # ecs_service_name                 = module.ecs_service[each.key].ecs_service_name
-#   ecs_service_name                 = module.ecs_service[each.key].ecs_service_name
-#   target_cpu_value                 = var.target_cpu_value
-# }
-
 module "cluster" {
   source = "../cluster"
 
@@ -57,122 +42,26 @@ module "cluster" {
   tags = var.tags
 }
 
+# module "service_cpu_autoscaling_policy" {
+#   # for_each = { for k, v in local.service_map : k => v if v.service_scaling }
+
+#   source = "../autoscaling-policy"
+
+#   name                             = var.name
+#   enable_ecs_cpu_based_autoscaling = true
+#   min_capacity                     = var.min_capacity
+#   max_capacity                     = var.max_capacity
+#   ecs_cluster_name                 = module.cluster.ecs_cluster_name
+#   ecs_service_name                 = module.service[each.key].ecs_service_name
+#   target_cpu_value                 = var.target_cpu_value
+# }
+
 # module "service" {
-#   source = "../service"
-# }
+#   for_each = { for k, v in var.service_map : k => v if v.create }
 
-# module "service_discovery" {
-#   source = "./service-discovery"
-# }
-
-
-
-
-
-
-
-
-
-
-
-
-
-# locals {
-#   service_map = {
-#     nextjs = {
-#       create          = true
-#       service_scaling = false
-#       container_definitions = jsonencode([
-#         module.container_drop_resolver_dcx.json_map_object,
-#         module.container_drop_resolver_print.json_map_object,
-#       ])
-#       task_cpu      = var.task_cpu
-#       task_memory   = var.task_memory
-#       desired_count = var.desired_count
-#       ecs_load_balancers = [
-#         {
-#           target_group_arn = element(module.alb.target_group_arns, 1),
-#           container_name   = "drop-resolver-dcx",
-#           container_port   = "8095"
-#         },
-#         {
-#           target_group_arn = element(module.alb.target_group_arns, 2),
-#           container_name   = "drop-resolver-print",
-#           container_port   = "8096"
-#         },
-#       ]
-#     }
-#     wordpress = {
-#       create          = true
-#       service_scaling = true
-#       container_definitions = jsonencode([
-#         module.container_cook.json_map_object,
-#       ])
-#       task_cpu      = var.task_cpu
-#       task_memory   = var.task_memory
-#       desired_count = var.desired_count
-#       ecs_load_balancers = [
-#         {
-#           target_group_arn = element(module.alb.target_group_arns, 0),
-#           container_name   = "cook",
-#           container_port   = "8101"
-#         },
-#       ]
-#     }
-#     topdrawer = {
-#       create          = true
-#       service_scaling = true
-#       container_definitions = jsonencode([
-#         module.container_topdrawer.json_map_object,
-#       ])
-#       task_cpu      = var.task_cpu
-#       task_memory   = var.task_memory
-#       desired_count = var.desired_count
-#       ecs_load_balancers = [
-#         {
-#           target_group_arn = element(module.alb.target_group_arns, 4),
-#           container_name   = "topdrawer",
-#           container_port   = "8082"
-#         },
-#       ]
-#     }
-#     preview = {
-#       create          = true
-#       service_scaling = true
-#       container_definitions = jsonencode([
-#         module.container_preview.json_map_object,
-#       ])
-#       task_cpu      = var.task_cpu
-#       task_memory   = var.task_memory
-#       desired_count = var.desired_count
-#       ecs_load_balancers = [
-#         {
-#           target_group_arn = element(module.alb.target_group_arns, 3),
-#           container_name   = "preview",
-#           container_port   = "8085"
-#         },
-#       ]
-#     }
-#     graphics_convert = {
-#       create          = true
-#       service_scaling = false
-#       container_definitions = jsonencode([
-#         module.container_graphics_convert.json_map_object,
-#       ])
-#       task_cpu           = var.task_cpu
-#       task_memory        = var.task_memory
-#       desired_count      = var.desired_count
-#       ecs_load_balancers = []
-#     }
-#   }
-# }
-
-# module "ecs_service" {
-#   for_each = { for k, v in local.service_map : k => v if v.create }
-
-#   source                = "./modules/service"
-#   name                  = format("%s-editorial-%s-%s", var.aws_app_prefix, replace(each.key, "_", "-"), var.aws_env)
-#   cluster_id            = module.ecs_cluster.ecs_cluster_id
+#   source                = "../service"
+#   name                  = format("%s-%s", var.name, replace(each.key, "_", "-"))
+#   cluster_id            = module.cluster.ecs_cluster_id
 #   container_definitions = each.value.container_definitions
 #   task_cpu              = each.value.task_cpu
 #   task_memory           = each.value.task_memory
@@ -184,5 +73,10 @@ module "cluster" {
 
 #   ecs_load_balancers = each.value.ecs_load_balancers
 #   tags               = { "Name" : var.name }
+
 # }
 
+
+# module "service_discovery" {
+#   source = "./service-discovery"
+# }

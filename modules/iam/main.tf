@@ -42,7 +42,7 @@ module "iam_policy" {
 
 
 resource "aws_iam_role_policy_attachment" "attach" {
-  count = length(module.iam_policy.id) > 0 ? 1 : 0
+  count = length(var.policy) > 0 ? 1 : 0
 
   role       = module.iam_assumable_role.iam_role_name
   policy_arn = module.iam_policy.arn
@@ -50,6 +50,7 @@ resource "aws_iam_role_policy_attachment" "attach" {
 
 resource "aws_iam_user_policy_attachment" "attach" {
   count      = var.create_user ? 1 : 0
+  
   user       = module.iam_user.iam_user_name
   policy_arn = module.iam_policy.arn
 }

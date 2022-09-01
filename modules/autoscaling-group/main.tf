@@ -7,7 +7,7 @@ module "asg" {
   # Autoscaling group
   name            = format("asg-%s", var.name)
   use_name_prefix = true
-  instance_name   = var.instance_name
+  instance_name   = format("ec2-asg-%s", var.instance_name)
 
   min_size                        = var.min_size
   max_size                        = var.max_size

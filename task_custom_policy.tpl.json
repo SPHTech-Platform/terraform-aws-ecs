@@ -1,0 +1,20 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "elasticache:Describe*"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:elasticache:${region}:${account}:*"
+        },
+        {
+            "Action": [
+                "rds:Describe*",
+                "rds:ListTagsForResource"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:rds:${region}:${account}:*"
+        }    
+    ]
+}
