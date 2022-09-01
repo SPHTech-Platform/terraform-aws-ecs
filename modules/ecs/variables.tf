@@ -134,19 +134,19 @@ variable "asg_subnets" {
 ################################################################################
 # Autoscaling group - policy
 ################################################################################
-variable "min_capacity" {
+variable "service_min_capacity" {
   description = "Minimum capacity of ECS autoscaling target, cannot be more than max_capacity"
   type        = number
   default     = 1
 }
 
-variable "max_capacity" {
+variable "service_max_capacity" {
   description = "Maximum capacity of ECS autoscaling target, cannot be less than min_capacity"
   type        = number
   default     = 4
 }
 
-variable "target_cpu_value" {
+variable "service_target_cpu_value" {
   description = "Autoscale when CPU Usage value over the specified value. Must be specified if `enable_cpu_based_autoscaling` is `true`."
   type        = number
   default     = 70

@@ -42,20 +42,6 @@ module "cluster" {
   tags = var.tags
 }
 
-# module "service_cpu_autoscaling_policy" {
-#   # for_each = { for k, v in local.service_map : k => v if v.service_scaling }
-
-#   source = "../autoscaling-policy"
-
-#   name                             = var.name
-#   enable_ecs_cpu_based_autoscaling = true
-#   min_capacity                     = var.min_capacity
-#   max_capacity                     = var.max_capacity
-#   ecs_cluster_name                 = module.cluster.ecs_cluster_name
-#   ecs_service_name                 = module.service[each.key].ecs_service_name
-#   target_cpu_value                 = var.target_cpu_value
-# }
-
 module "service" {
   for_each = { for k, v in var.service_map : k => v if v.create }
 
@@ -76,6 +62,19 @@ module "service" {
 
 }
 
+module "service_cpu_autoscaling_policy" {
+  for_each = { for k, v in var.service_map : k => v if v.service_scaling }
+
+  source = "../autoscaling-policy"
+
+  name                             = format("%s-%s", var.name, replace(each.key, "_", "-"))
+  enable_ecs_cpu_based_autoscaling = true
+  min_capacity                     = var.service_min_capacity
+  max_capacity                     = var.service_max_capacity
+  target_cpu_value                 = var.service_target_cpu_value
+  ecs_cluster_name                 = module.cluster.ecs_cluster_name
+  ecs_service_name                 = module.service[each.key].ecs_service_name
+}
 
 # module "service_discovery" {
 #   source = "./service-discovery"

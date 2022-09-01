@@ -61,17 +61,128 @@ locals {
   }
 }
 
-data "aws_ssm_parameter" "vpc_id" {
-  name = "/aft/provisioned/vpc/vpc_id"
-}
+# module "alb" {
+#   source  = "terraform-aws-modules/alb/aws"
+#   version = "~> 6.0"
 
-data "aws_ssm_parameter" "private_subnets" {
-  name = "/aft/provisioned/vpc/private_subnets"
-}
+#   name = format("alb-%s", var.name)
 
-data "aws_ssm_parameter" "bottlerocket_ami" {
-  name = "/aws/service/bottlerocket/aws-ecs-1/x86_64/latest/image_id"
-}
+#   internal           = var.internal
+#   load_balancer_type = "application"
+#   vpc_id             = var.vpc_id
+#   security_groups    = var.lb_security_groups
+#   subnets            = var.lb_subnets
+
+#   listener_ssl_policy_default = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
+
+
+#   https_listeners = [
+#     {
+#       port            = 443
+#       protocol        = "HTTPS"
+#       certificate_arn = var.certificate_arn
+#       # target_group_index = 0
+#       # action_type = "forward"
+#     }
+#   ]
+
+#   https_listener_rules = [
+#     {
+#       https_listener_index = 0
+#       priority             = 3
+#       conditions = [{
+#         path_patterns = var.cue_engine_path_patterns
+#       }]
+#       actions = [{
+#         type               = "forward"
+#         target_group_index = 3
+#       }]
+#     }
+#   ]
+
+
+#   http_tcp_listeners = [
+#     # Forward action is default, either when defined or undefined
+#     {
+#       port        = 80
+#       protocol    = "HTTP"
+#       action_type = "redirect"
+#       redirect = {
+#         port        = "443"
+#         protocol    = "HTTPS"
+#         status_code = "HTTP_301"
+#       }
+#     },
+#     {
+#       port               = 8080
+#       protocol           = "HTTP"
+#       target_group_index = 1
+#     },
+#     {
+#       port               = 8083
+#       protocol           = "HTTP"
+#       target_group_index = 2
+#     },
+#     {
+#       port               = 9080
+#       protocol           = "HTTP"
+#       target_group_index = 4
+#     },
+#   ]
+
+#   target_groups = [
+#     {
+#       name             = format("tg-%s-nextjs-%s", var.name, var.aws_env)
+#       backend_protocol = "HTTP"
+#       backend_port     = 80
+#       target_type      = "ip"
+#       #      deregistration_delay = 10
+#       health_check = {
+#         enabled             = true
+#         interval            = 15
+#         path                = "/"
+#         port                = "traffic-port"
+#         healthy_threshold   = 2
+#         unhealthy_threshold = 2
+#         timeout             = 5
+#         protocol            = "HTTP"
+#         matcher             = "301"
+#       }
+#     }
+#   ]
+
+#   tags = { "Name" : var.name }
+
+#   target_group_tags = { Name = var.name }
+# }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 module "ecs_instance_role" {
   source = "./modules/iam"
@@ -139,7 +250,9 @@ module "ecs_cluster" {
   service_map                 = local.service_map
   service_task_execution_role_arn = module.ecs_task_execution_role.iam_role_arn
   service_task_role_arn           = module.ecs_task_role.iam_role_arn
-  service_subnets             = [data.aws_ssm_parameter.private_subnets.value]
+  # service_subnets             = [data.aws_ssm_parameter.private_subnets.value]
+  service_subnets             = split(",", data.aws_ssm_parameter.private_subnets.value)
+  # service_subnets             = ["subnet-083e1b4fecfb9680b","subnet-0d8846d6bffdb06ed","subnet-0d19ac19f27184b07"]
   service_security_groups     = [aws_security_group.asg_sg.id]
 
 
