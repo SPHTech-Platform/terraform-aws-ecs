@@ -36,8 +36,30 @@ variable "desired_count" {
 
 variable "service_map" {
   description = "A map of services to deploy"
-  type = map
-  default = {}
+  type        = map(any)
+  default     = {}
+}
+
+variable "service_task_execution_role_arn" {
+  description = "IAM role for ECS execution"
+  type        = string
+}
+
+variable "service_task_role_arn" {
+  description = "IAM role for ECS task"
+  type        = string
+}
+
+variable "service_subnets" {
+  description = "Private subnets for ECS"
+  type        = list(string)
+  default     = []
+}
+
+variable "service_security_groups" {
+  description = "Security group IDs to attach to your ECS Service"
+  type        = list(string)
+  default     = []
 }
 
 ################################################################################

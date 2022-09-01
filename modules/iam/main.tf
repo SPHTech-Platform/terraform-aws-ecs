@@ -49,8 +49,8 @@ resource "aws_iam_role_policy_attachment" "attach" {
 }
 
 resource "aws_iam_user_policy_attachment" "attach" {
-  count      = var.create_user ? 1 : 0
-  
+  count = var.create_user ? 1 : 0
+
   user       = module.iam_user.iam_user_name
   policy_arn = module.iam_policy.arn
 }

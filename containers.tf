@@ -38,12 +38,12 @@ module "container_awedio_nextjs" {
   }
   port_mappings = [
     {
-      "hostPort" : 80,
+      "hostPort" : 3000,
       "protocol" : "tcp",
       "containerPort" : 3000
     }
   ]
   container_memory_reservation = 128
   # secrets                      = local.drop_resolver_secrets_list
-  environment                  = local.environment_list
+  environment = local.environment_list
 }

@@ -56,25 +56,25 @@ module "cluster" {
 #   target_cpu_value                 = var.target_cpu_value
 # }
 
-# module "service" {
-#   for_each = { for k, v in var.service_map : k => v if v.create }
+module "service" {
+  for_each = { for k, v in var.service_map : k => v if v.create }
 
-#   source                = "../service"
-#   name                  = format("%s-%s", var.name, replace(each.key, "_", "-"))
-#   cluster_id            = module.cluster.ecs_cluster_id
-#   container_definitions = each.value.container_definitions
-#   task_cpu              = each.value.task_cpu
-#   task_memory           = each.value.task_memory
-#   execution_role_arn    = var.execution_role_arn
-#   task_role_arn         = var.task_role_arn
-#   desired_count         = each.value.desired_count
-#   subnets               = var.ecs_subnets
-#   security_groups       = var.ecs_security_groups
+  source                = "../service"
+  name                  = format("%s-%s", var.name, replace(each.key, "_", "-"))
+  cluster_id            = module.cluster.ecs_cluster_id
+  container_definitions = each.value.service_container_definitions
+  task_cpu              = each.value.service_task_cpu
+  task_memory           = each.value.service_task_memory
+  desired_count         = each.value.service_desired_count
+  execution_role_arn    = var.service_task_execution_role_arn
+  task_role_arn         = var.service_task_role_arn
+  subnets               = var.service_subnets
+  security_groups       = var.service_security_groups
 
-#   ecs_load_balancers = each.value.ecs_load_balancers
-#   tags               = { "Name" : var.name }
+  # ecs_load_balancers = each.value.ecs_load_balancers
+  tags = { "Name" : var.name }
 
-# }
+}
 
 
 # module "service_discovery" {

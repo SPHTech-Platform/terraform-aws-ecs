@@ -1,5 +1,5 @@
 locals {
-  name = "awedio"
+  name    = "awedio"
   aws_env = "dev"
 
   # mandatory_tags = {
@@ -22,12 +22,12 @@ locals {
     nextjs = {
       create          = true
       service_scaling = true
-      container_definitions = jsonencode([
+      service_container_definitions = jsonencode([
         module.container_awedio_nextjs.json_map_object
       ])
-      task_cpu      = 256
-      task_memory   = 512
-      desired_count = 1
+      service_task_cpu      = 256
+      service_task_memory   = 512
+      service_desired_count = 1
       # ecs_load_balancers = [
       #   {
       #     target_group_arn = element(module.alb.target_group_arns, 1),
@@ -129,15 +129,19 @@ module "ecs_cluster" {
   asg_subnets                           = [data.aws_ssm_parameter.private_subnets.value]
   asg_network_interface_security_groups = [aws_security_group.asg_sg.id]
   # asg_image_id                          = "ami-01f890f0ede139c03" # bottlerocket AMI
-  asg_image_id                          = data.aws_ssm_parameter.bottlerocket_ami.value
-  asg_instance_type                     = "m5.2xlarge"
-  asg_volume_size                       = "30"
-  asg_iam_instance_profile_arn          = module.ecs_instance_role.iam_instance_profile_arn
-  asg_user_data_base64                  = base64encode(templatefile("${path.module}/user_data.toml", { name = local.name }))
+  asg_image_id                 = data.aws_ssm_parameter.bottlerocket_ami.value
+  asg_instance_type            = "m5.2xlarge"
+  asg_volume_size              = "30"
+  asg_iam_instance_profile_arn = module.ecs_instance_role.iam_instance_profile_arn
+  asg_user_data_base64         = base64encode(templatefile("${path.module}/user_data.toml", { name = local.name }))
 
   # Service
-  service_map = local.service_map
-  # service_execution_role = module.ecs_task_execution_role.iam_role_arn
+  service_map                 = local.service_map
+  service_task_execution_role_arn = module.ecs_task_execution_role.iam_role_arn
+  service_task_role_arn           = module.ecs_task_role.iam_role_arn
+  service_subnets             = [data.aws_ssm_parameter.private_subnets.value]
+  service_security_groups     = [aws_security_group.asg_sg.id]
+
 
 
 
