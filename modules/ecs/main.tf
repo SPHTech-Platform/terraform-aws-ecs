@@ -57,9 +57,9 @@ module "service" {
   subnets               = var.service_subnets
   security_groups       = var.service_security_groups
 
-  # ecs_load_balancers = each.value.ecs_load_balancers
+  ecs_load_balancers = each.value.ecs_load_balancers
+  
   tags = { "Name" : var.name }
-
 }
 
 module "service_cpu_autoscaling_policy" {

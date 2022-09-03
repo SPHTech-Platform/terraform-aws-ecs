@@ -29,18 +29,13 @@ locals {
       service_task_cpu      = 256
       service_task_memory   = 512
       service_desired_count = 1
-      # ecs_load_balancers = [
-      #   {
-      #     target_group_arn = element(module.alb.target_group_arns, 1),
-      #     container_name   = "drop-resolver-dcx",
-      #     container_port   = "8095"
-      #   },
-      #   {
-      #     target_group_arn = element(module.alb.target_group_arns, 2),
-      #     container_name   = "drop-resolver-print",
-      #     container_port   = "8096"
-      #   },
-      # ]
+      ecs_load_balancers = [
+        {
+          target_group_arn = element(module.alb.target_group_arns, 0),
+          container_name   = "awedio-nextjs",
+          container_port   = "3000"
+        }
+      ]
     }
     # wordpress = {
     #   create          = true
@@ -81,7 +76,8 @@ module "acm" {
   version = "~> 4.0"
 
   domain_name = local.domain_name
-  zone_id     = keys(module.zones.route53_zone_zone_id)[0]
+  # zone_id     = keys(module.zones.route53_zone_zone_id)[0]
+  zone_id     = "Z01336191IWO7D9W5I8XT"
 
   subject_alternative_names = [
     "*.${local.domain_name}",
@@ -98,13 +94,14 @@ module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 6.0"
 
-  name = format("alb-%s", var.name)
+  name = format("alb-%s", local.name)
 
   internal           = false
   load_balancer_type = "application"
-  vpc_id             = data.aws_ssm_parameter.vpc_id
+  vpc_id             = "${data.aws_ssm_parameter.vpc_id.value}"
   security_groups    = [ aws_security_group.lb_sg.id ]
-  subnets            = data.aws_ssm_parameter.public_subnets
+  # subnets            = [ data.aws_ssm_parameter.public_subnets.value ]
+  subnets            = split(",", data.aws_ssm_parameter.public_subnets.value)
 
   listener_ssl_policy_default = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
 
@@ -171,7 +168,7 @@ module "alb" {
 
   target_groups = [
     {
-      name             = format("tg-%s-nextjs-%s", var.name, var.aws_env)
+      name             = format("tg-%s-nextjs-%s", local.name, local.aws_env)
       backend_protocol = "HTTP"
       backend_port     = 3000
       target_type      = "ip"
@@ -189,9 +186,9 @@ module "alb" {
     }
   ]
 
-  tags = { "Name" : var.name }
+  tags = { "Name" : local.name }
 
-  target_group_tags = { Name = var.name }
+  target_group_tags = { Name = local.name }
 }
 
 
@@ -313,14 +310,24 @@ resource "aws_security_group" "lb_sg" {
     protocol         = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
 
-  egress {
-    description = "Allow outbound traffic to ECS"
-    from_port        = 3000
-    to_port          = 3000
-    protocol         = "tcp"
-    security_groups = [ aws_security_group.ecs_sg.id ]
-  }
+resource "aws_security_group_rule" "lb_sg_egress" {
+  type = "egress"
+  from_port = 3000
+  to_port = 3000
+  protocol = "tcp"
+  security_group_id = "${aws_security_group.lb_sg.id}"
+  source_security_group_id = "${aws_security_group.ecs_sg.id}"
+}
+
+resource "aws_security_group_rule" "lb_sg_allow_all" {
+  type = "egress"
+  from_port = 0
+  to_port = 0
+  protocol = "-1"
+  security_group_id = "${aws_security_group.lb_sg.id}"
+  cidr_blocks = [ "0.0.0.0/0" ]
 }
 
 resource "aws_security_group" "ecs_sg" {
@@ -334,5 +341,12 @@ resource "aws_security_group" "ecs_sg" {
     to_port     = 3000
     protocol    = "tcp"
     security_groups = [ aws_security_group.lb_sg.id ]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
