@@ -10,6 +10,10 @@ data "aws_ssm_parameter" "private_subnets" {
   name = "/aft/provisioned/vpc/private_subnets"
 }
 
+data "aws_ssm_parameter" "public_subnets" {
+  name = "/aft/provisioned/vpc/public_subnets"
+}
+
 data "aws_ssm_parameter" "bottlerocket_ami" {
   name = "/aws/service/bottlerocket/aws-ecs-1/x86_64/latest/image_id"
 }

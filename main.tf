@@ -1,6 +1,7 @@
 locals {
   name    = "awedio"
   aws_env = "dev"
+  domain_name = "sandbox-653505252669.platform.sphdigital.com.sg"
 
   # mandatory_tags = {
   #   env         = "dev"
@@ -61,100 +62,137 @@ locals {
   }
 }
 
-# module "alb" {
-#   source  = "terraform-aws-modules/alb/aws"
-#   version = "~> 6.0"
+##### Manually created in AWS console #####
+# module "zones" {
+#   source  = "terraform-aws-modules/route53/aws//modules/zones"
+#   version = "~> 1.0"
 
-#   name = format("alb-%s", var.name)
-
-#   internal           = var.internal
-#   load_balancer_type = "application"
-#   vpc_id             = var.vpc_id
-#   security_groups    = var.lb_security_groups
-#   subnets            = var.lb_subnets
-
-#   listener_ssl_policy_default = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
-
-
-#   https_listeners = [
-#     {
-#       port            = 443
-#       protocol        = "HTTPS"
-#       certificate_arn = var.certificate_arn
-#       # target_group_index = 0
-#       # action_type = "forward"
-#     }
-#   ]
-
-#   https_listener_rules = [
-#     {
-#       https_listener_index = 0
-#       priority             = 3
-#       conditions = [{
-#         path_patterns = var.cue_engine_path_patterns
-#       }]
-#       actions = [{
-#         type               = "forward"
-#         target_group_index = 3
-#       }]
-#     }
-#   ]
-
-
-#   http_tcp_listeners = [
-#     # Forward action is default, either when defined or undefined
-#     {
-#       port        = 80
-#       protocol    = "HTTP"
-#       action_type = "redirect"
-#       redirect = {
-#         port        = "443"
-#         protocol    = "HTTPS"
-#         status_code = "HTTP_301"
-#       }
-#     },
-#     {
-#       port               = 8080
-#       protocol           = "HTTP"
-#       target_group_index = 1
-#     },
-#     {
-#       port               = 8083
-#       protocol           = "HTTP"
-#       target_group_index = 2
-#     },
-#     {
-#       port               = 9080
-#       protocol           = "HTTP"
-#       target_group_index = 4
-#     },
-#   ]
-
-#   target_groups = [
-#     {
-#       name             = format("tg-%s-nextjs-%s", var.name, var.aws_env)
-#       backend_protocol = "HTTP"
-#       backend_port     = 80
-#       target_type      = "ip"
-#       #      deregistration_delay = 10
-#       health_check = {
-#         enabled             = true
-#         interval            = 15
-#         path                = "/"
-#         port                = "traffic-port"
-#         healthy_threshold   = 2
-#         unhealthy_threshold = 2
-#         timeout             = 5
-#         protocol            = "HTTP"
-#         matcher             = "301"
+#   zones = {
+#     "${local.domain_name}" = {
+#       tags = {
+#         env = "development"
 #       }
 #     }
-#   ]
-
-#   tags = { "Name" : var.name }
-
-#   target_group_tags = { Name = var.name }
+#   }
 # }
+
+module "acm" {
+  source  = "terraform-aws-modules/acm/aws"
+  version = "~> 4.0"
+
+  domain_name = local.domain_name
+  zone_id     = keys(module.zones.route53_zone_zone_id)[0]
+
+  subject_alternative_names = [
+    "*.${local.domain_name}",
+  ]
+
+  wait_for_validation = false
+
+  tags = {
+    Name = local.domain_name
+  }
+}
+
+module "alb" {
+  source  = "terraform-aws-modules/alb/aws"
+  version = "~> 6.0"
+
+  name = format("alb-%s", var.name)
+
+  internal           = false
+  load_balancer_type = "application"
+  vpc_id             = data.aws_ssm_parameter.vpc_id
+  security_groups    = [ aws_security_group.lb_sg.id ]
+  subnets            = data.aws_ssm_parameter.public_subnets
+
+  listener_ssl_policy_default = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
+
+
+  https_listeners = [
+    {
+      port            = 443
+      protocol        = "HTTPS"
+      certificate_arn = module.acm.acm_certificate_arn
+      target_group_index = 0
+    }
+  ]
+
+  # https_listener_rules = [
+  #   {
+  #     https_listener_index = 0
+  #     priority             = 3
+  #     conditions = [{
+  #       path_patterns = var.cue_engine_path_patterns
+  #     }]
+  #     actions = [{
+  #       type               = "forward"
+  #       target_group_index = 3
+  #     }]
+  #   }
+  # ]
+
+  # http_tcp_listeners = [
+  #   {
+  #     port = 80
+  #     protocol = "HTTP"
+  #     target_group_index = 0
+  #   }
+  # ]
+
+  # http_tcp_listeners = [
+  #   # Forward action is default, either when defined or undefined
+  #   {
+  #     port        = 80
+  #     protocol    = "HTTP"
+  #     action_type = "redirect"
+  #     redirect = {
+  #       port        = "443"
+  #       protocol    = "HTTPS"
+  #       status_code = "HTTP_301"
+  #     }
+  #   },
+  #   {
+  #     port               = 8080
+  #     protocol           = "HTTP"
+  #     target_group_index = 1
+  #   },
+  #   {
+  #     port               = 8083
+  #     protocol           = "HTTP"
+  #     target_group_index = 2
+  #   },
+  #   {
+  #     port               = 9080
+  #     protocol           = "HTTP"
+  #     target_group_index = 4
+  #   },
+  # ]
+
+  target_groups = [
+    {
+      name             = format("tg-%s-nextjs-%s", var.name, var.aws_env)
+      backend_protocol = "HTTP"
+      backend_port     = 3000
+      target_type      = "ip"
+      health_check = {
+        enabled             = true
+        interval            = 15
+        path                = "/"
+        port                = "traffic-port"
+        healthy_threshold   = 2
+        unhealthy_threshold = 2
+        timeout             = 5
+        protocol            = "HTTP"
+        matcher             = "301"
+      }
+    }
+  ]
+
+  tags = { "Name" : var.name }
+
+  target_group_tags = { Name = var.name }
+}
 
 
 
@@ -238,7 +276,7 @@ module "ecs_cluster" {
   asg_desired_capacity                  = "2"
   asg_protect_from_scale_in             = true
   asg_subnets                           = [data.aws_ssm_parameter.private_subnets.value]
-  asg_network_interface_security_groups = [aws_security_group.asg_sg.id]
+  asg_network_interface_security_groups = [aws_security_group.ecs_sg.id]
   # asg_image_id                          = "ami-01f890f0ede139c03" # bottlerocket AMI
   asg_image_id                 = data.aws_ssm_parameter.bottlerocket_ami.value
   asg_instance_type            = "m5.2xlarge"
@@ -251,9 +289,9 @@ module "ecs_cluster" {
   service_task_execution_role_arn = module.ecs_task_execution_role.iam_role_arn
   service_task_role_arn           = module.ecs_task_role.iam_role_arn
   # service_subnets             = [data.aws_ssm_parameter.private_subnets.value]
-  service_subnets             = split(",", data.aws_ssm_parameter.private_subnets.value)
   # service_subnets             = ["subnet-083e1b4fecfb9680b","subnet-0d8846d6bffdb06ed","subnet-0d19ac19f27184b07"]
-  service_security_groups     = [aws_security_group.asg_sg.id]
+  service_subnets             = split(",", data.aws_ssm_parameter.private_subnets.value)
+  service_security_groups     = [aws_security_group.ecs_sg.id]
 
 
 
@@ -263,33 +301,38 @@ module "ecs_cluster" {
 
 }
 
-resource "aws_security_group" "asg_sg" {
-  name        = format("%s-sg", local.name)
+resource "aws_security_group" "lb_sg" {
+  name        = format("%s-lb-sg", local.name)
   description = "Allow inbound traffic"
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
 
-  ingress { # ingress from load balancer
-    description = "Ingress from HTTP"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress { # ingress from load balancer
-    description = "Ingress from HTTPS"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
+  ingress {
+    description      = "Allow HTTPS inbound traffic on the load balancer listener port"
+    from_port        = 443
+    to_port          = 443
+    protocol         = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow outbound traffic to ECS"
+    from_port        = 3000
+    to_port          = 3000
+    protocol         = "tcp"
+    security_groups = [ aws_security_group.ecs_sg.id ]
   }
+}
 
-  # tags = local.standard_tags
+resource "aws_security_group" "ecs_sg" {
+  name        = format("%s-ecs-sg", local.name)
+  description = "Allow inbound traffic"
+  vpc_id      = data.aws_ssm_parameter.vpc_id.value
+
+  ingress {
+    description = "Allow inbound traffic from the load balancer"
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    security_groups = [ aws_security_group.lb_sg.id ]
+  }
 }
