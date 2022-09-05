@@ -115,56 +115,18 @@ module "alb" {
     }
   ]
 
-  # https_listener_rules = [
-  #   {
-  #     https_listener_index = 0
-  #     priority             = 3
-  #     conditions = [{
-  #       path_patterns = var.cue_engine_path_patterns
-  #     }]
-  #     actions = [{
-  #       type               = "forward"
-  #       target_group_index = 3
-  #     }]
-  #   }
-  # ]
-
-  # http_tcp_listeners = [
-  #   {
-  #     port = 80
-  #     protocol = "HTTP"
-  #     target_group_index = 0
-  #   }
-  # ]
-
-  # http_tcp_listeners = [
-  #   # Forward action is default, either when defined or undefined
-  #   {
-  #     port        = 80
-  #     protocol    = "HTTP"
-  #     action_type = "redirect"
-  #     redirect = {
-  #       port        = "443"
-  #       protocol    = "HTTPS"
-  #       status_code = "HTTP_301"
-  #     }
-  #   },
-  #   {
-  #     port               = 8080
-  #     protocol           = "HTTP"
-  #     target_group_index = 1
-  #   },
-  #   {
-  #     port               = 8083
-  #     protocol           = "HTTP"
-  #     target_group_index = 2
-  #   },
-  #   {
-  #     port               = 9080
-  #     protocol           = "HTTP"
-  #     target_group_index = 4
-  #   },
-  # ]
+  http_tcp_listeners = [
+    {
+      port        = 80
+      protocol    = "HTTP"
+      action_type = "redirect"
+      redirect = {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
+    }
+  ]
 
   target_groups = [
     {
@@ -175,13 +137,13 @@ module "alb" {
       health_check = {
         enabled             = true
         interval            = 15
-        path                = "/"
+        path                = "/api/probe/"
         port                = "traffic-port"
         healthy_threshold   = 2
         unhealthy_threshold = 2
         timeout             = 5
         protocol            = "HTTP"
-        matcher             = "301"
+        matcher             = "200"
       }
     }
   ]
@@ -190,34 +152,6 @@ module "alb" {
 
   target_group_tags = { Name = local.name }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module "ecs_instance_role" {
   source = "./modules/iam"
@@ -229,8 +163,6 @@ module "ecs_instance_role" {
   ]
   create_user             = false
   create_instance_profile = true
-
-  # tags = local.standard_tags
 }
 
 module "ecs_task_execution_role" {
@@ -289,19 +221,20 @@ module "ecs_cluster" {
   # service_subnets             = ["subnet-083e1b4fecfb9680b","subnet-0d8846d6bffdb06ed","subnet-0d19ac19f27184b07"]
   service_subnets             = split(",", data.aws_ssm_parameter.private_subnets.value)
   service_security_groups     = [aws_security_group.ecs_sg.id]
-
-
-
-
-
-  # tags = local.standard_tags
-
 }
 
 resource "aws_security_group" "lb_sg" {
   name        = format("%s-lb-sg", local.name)
   description = "Allow inbound traffic"
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
+
+  ingress {
+    description      = "Allow HTTP inbound traffic on the load balancer listener port"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   ingress {
     description      = "Allow HTTPS inbound traffic on the load balancer listener port"
@@ -350,3 +283,4 @@ resource "aws_security_group" "ecs_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
