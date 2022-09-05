@@ -104,6 +104,7 @@ variable "network_mode" {
 variable "tags" {
   description = "Tags for ECS cluster"
   type        = map(string)
+  default     = {}
 }
 
 variable "subnets" {

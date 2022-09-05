@@ -28,8 +28,6 @@ module "autoscaling_group" {
   subnets                           = var.asg_subnets
   network_interface_security_groups = var.asg_network_interface_security_groups
   placement                         = var.asg_placement
-
-  tags = var.tags
 }
 
 module "cluster" {
@@ -38,8 +36,6 @@ module "cluster" {
   name                              = var.name
   link_ecs_to_asg_capacity_provider = var.link_ecs_to_asg_capacity_provider
   asg_arn                           = module.autoscaling_group.autoscaling_group_arn
-
-  tags = var.tags
 }
 
 module "service" {
@@ -58,8 +54,6 @@ module "service" {
   security_groups       = var.service_security_groups
 
   ecs_load_balancers = each.value.ecs_load_balancers
-  
-  tags = { "Name" : var.name }
 }
 
 module "service_cpu_autoscaling_policy" {
@@ -75,7 +69,3 @@ module "service_cpu_autoscaling_policy" {
   ecs_cluster_name                 = module.cluster.ecs_cluster_name
   ecs_service_name                 = module.service[each.key].ecs_service_name
 }
-
-# module "service_discovery" {
-#   source = "./service-discovery"
-# }
