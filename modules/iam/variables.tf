@@ -1,3 +1,6 @@
+################################################################################
+# Create Role
+################################################################################
 variable "role_name" {
   description = "IAM role name"
   type        = string
@@ -28,12 +31,9 @@ variable "custom_role_policy_arns" {
   default     = []
 }
 
-variable "tags" {
-  description = "A map of tags to add to IAM role resources"
-  type        = map(string)
-  default     = {}
-}
-
+################################################################################
+# IAM User
+################################################################################
 variable "create_user" {
   description = "Whether to create the IAM user"
   type        = bool
@@ -46,6 +46,9 @@ variable "user_name" {
   default     = null
 }
 
+################################################################################
+# IAM Policy
+################################################################################
 variable "create_policy" {
   description = "Whether to create the IAM policy"
   type        = bool
@@ -68,4 +71,13 @@ variable "policy" {
   description = "The path of the policy in IAM (tpl file)"
   type        = string
   default     = ""
+}
+
+################################################################################
+# Tagging
+################################################################################
+variable "tags" {
+  description = "A map of tags to add to IAM role resources"
+  type        = map(string)
+  default     = {}
 }

@@ -3,21 +3,11 @@ variable "name" {
   type        = string
 }
 
+################################################################################
+# Autoscaling target
+################################################################################
 variable "ecs_cluster_name" {
   description = "ECS Cluster name to apply on (NOT ARN)"
-  type        = string
-}
-
-variable "disable_scale_in" {
-  description = "Disable scale-in action, defaults to false"
-  type        = bool
-  default     = false
-}
-
-## ECS service target tracking
-
-variable "ecs_service_name" {
-  description = "ECS Service name to apply on (NOT ARN)"
   type        = string
 }
 
@@ -31,26 +21,28 @@ variable "max_capacity" {
   type        = number
 }
 
-variable "target_cpu_value" {
-  description = "Autoscale when CPU Usage value over the specified value. Must be specified if `enable_cpu_based_autoscaling` is `true`."
-  type        = number
-  default     = null
+variable "ecs_service_name" {
+  description = "ECS Service name to apply on (NOT ARN)"
+  type        = string
 }
 
-variable "target_memory_value" {
-  description = "Autoscale when Memory Usage value over the specified value. Must be specified if `enable_memory_based_autoscaling` is `true`."
-  type        = number
-  default     = null
-}
-
+################################################################################
+# App autoscaling policy
+################################################################################
 variable "enable_ecs_cpu_based_autoscaling" {
   description = "Enable Autoscaling based on ECS Service CPU Usage"
   type        = bool
   default     = false
 }
 
-variable "enable_ecs_memory_based_autoscaling" {
-  description = "Enable Autoscaling based on ECS Service Memory Usage"
+variable "target_cpu_value" {
+  description = "Autoscale when CPU Usage value over the specified value. Must be specified if `enable_cpu_based_autoscaling` is `true`."
+  type        = number
+  default     = null
+}
+
+variable "disable_scale_in" {
+  description = "Disable scale-in action, defaults to false"
   type        = bool
   default     = false
 }
@@ -67,24 +59,31 @@ variable "scale_out_cooldown" {
   default     = 300
 }
 
-## ASG Target Tracking
-variable "autoscaling_group_name" {
-  description = "Autoscaling Group to apply the policy"
-  type        = string
+variable "enable_ecs_memory_based_autoscaling" {
+  description = "Enable Autoscaling based on ECS Service Memory Usage"
+  type        = bool
+  default     = false
+}
+
+variable "target_memory_value" {
+  description = "Autoscale when Memory Usage value over the specified value. Must be specified if `enable_memory_based_autoscaling` is `true`."
+  type        = number
   default     = null
 }
 
-
+################################################################################
+# Autoscaling policy
+################################################################################
 variable "enable_asg_cpu_based_autoscaling" {
   description = "Enable Autoscaling based on ECS Cluster CPU Reservation"
   type        = bool
   default     = false
 }
 
-variable "enable_asg_memory_based_autoscaling" {
-  description = "Enable Autoscaling based on ECS Cluster Memory Reservation"
-  type        = bool
-  default     = false
+variable "autoscaling_group_name" {
+  description = "Autoscaling Group to apply the policy"
+  type        = string
+  default     = null
 }
 
 variable "cpu_threshold" {
@@ -92,6 +91,14 @@ variable "cpu_threshold" {
   type        = number
   default     = null
 }
+
+
+variable "enable_asg_memory_based_autoscaling" {
+  description = "Enable Autoscaling based on ECS Cluster Memory Reservation"
+  type        = bool
+  default     = false
+}
+
 
 variable "memory_threshold" {
   description = "Keep the ECS Cluster Memory Reservation around this value. Value is in percentage (0..100). Must be specified if memory based autoscaling is enabled."

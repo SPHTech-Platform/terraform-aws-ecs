@@ -1,3 +1,18 @@
+variable "name" {
+  description = "Name of the product/project/application"
+  type        = string
+  default     = null
+}
+
+variable "ecs_cluster_name" {
+  description = "Name of the ecs cluster"
+  type        = string
+  default     = null
+}
+
+################################################################################
+# Cloudwatch
+################################################################################
 variable "create_log_group" {
   description = "Whether to create log group"
   type        = bool
@@ -16,12 +31,9 @@ variable "log_retention" {
   default     = 30
 }
 
-variable "log_encryption_enabled" {
-  description = "Whether to enable log encryption"
-  type        = bool
-  default     = false
-}
-
+################################################################################
+# ECS Capacity Provider
+################################################################################
 variable "link_ecs_to_asg_capacity_provider" {
   description = "Specify whether link ECS to autoscaling group capacity provider"
   type        = bool
@@ -38,12 +50,6 @@ variable "default_capacity_provider_strategy" {
   description = "The capacity provider strategy to use by default for the cluster. Can be one or more."
   type        = list(map(any))
   default     = []
-}
-
-variable "capacity_provider_name" {
-  description = "Name for ECS capacity provider"
-  type        = string
-  default     = ""
 }
 
 variable "capacity_providers" {
@@ -94,18 +100,6 @@ variable "scaling_target_capacity" {
   default     = 80
 }
 
-variable "ecs_cluster_name" {
-  description = "Name of the ecs cluster"
-  type        = string
-  default     = null
-}
-
-variable "name" {
-  description = "Name of the product/project/application"
-  type        = string
-  default     = null
-}
-
 variable "ecs_container_insights" {
   description = "Whether to enable container insights for ECS cluster"
   type        = bool
@@ -118,9 +112,9 @@ variable "ecs_encrypt_logs" {
   default     = true
 }
 
-##############################
+################################################################################
 # Tagging
-##############################
+################################################################################
 variable "tags" {
   description = "AWS tags to be applied to resources"
   type        = map(string)

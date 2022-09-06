@@ -1,7 +1,11 @@
 locals {
-  name    = "awedio"
-  aws_env = "dev"
+  name        = "awedio"
   domain_name = "sandbox-653505252669.platform.sphdigital.com.sg"
+
+  aws_app_prefix = "radio"
+  aws_app_name   = "awedio"
+  aws_env        = "dev"
+  aws_name       = "${local.aws_app_prefix}-${local.aws_app_name}-${local.aws_env}"
 
   # mandatory_tags = {
   #   env         = "dev"
@@ -77,7 +81,7 @@ module "acm" {
 
   domain_name = local.domain_name
   # zone_id     = keys(module.zones.route53_zone_zone_id)[0]
-  zone_id     = "Z01336191IWO7D9W5I8XT"
+  zone_id = "Z01336191IWO7D9W5I8XT"
 
   subject_alternative_names = [
     "*.${local.domain_name}",
@@ -94,23 +98,23 @@ module "alb" {
   source  = "terraform-aws-modules/alb/aws"
   version = "~> 6.0"
 
-  name = format("alb-%s", local.name)
+  name = "alb-${local.aws_name}"
 
   internal           = false
   load_balancer_type = "application"
-  vpc_id             = "${data.aws_ssm_parameter.vpc_id.value}"
-  security_groups    = [ aws_security_group.lb_sg.id ]
+  vpc_id             = data.aws_ssm_parameter.vpc_id.value
+  security_groups    = [aws_security_group.lb_sg.id]
   # subnets            = [ data.aws_ssm_parameter.public_subnets.value ]
-  subnets            = split(",", data.aws_ssm_parameter.public_subnets.value)
+  subnets = split(",", data.aws_ssm_parameter.public_subnets.value)
 
   listener_ssl_policy_default = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
 
 
   https_listeners = [
     {
-      port            = 443
-      protocol        = "HTTPS"
-      certificate_arn = module.acm.acm_certificate_arn
+      port               = 443
+      protocol           = "HTTPS"
+      certificate_arn    = module.acm.acm_certificate_arn
       target_group_index = 0
     }
   ]
@@ -130,7 +134,7 @@ module "alb" {
 
   target_groups = [
     {
-      name             = format("tg-%s-nextjs-%s", local.name, local.aws_env)
+      name             = "tg-nextjs-${local.aws_name}"
       backend_protocol = "HTTP"
       backend_port     = 3000
       target_type      = "ip"
@@ -148,15 +152,15 @@ module "alb" {
     }
   ]
 
-  tags = { "Name" : local.name }
+  tags = { "Name" : "${local.aws_name}" }
 
-  target_group_tags = { Name = local.name }
+  target_group_tags = { Name = "${local.aws_name}" }
 }
 
 module "ecs_instance_role" {
   source = "./modules/iam"
 
-  role_name             = format("ecs-instance-role-%s", local.name)
+  role_name             = "ecs-instance-role-${local.aws_name}"
   trusted_role_services = ["ec2.amazonaws.com"]
   custom_role_policy_arns = [
     "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
@@ -168,7 +172,7 @@ module "ecs_instance_role" {
 module "ecs_task_execution_role" {
   source = "./modules/iam"
 
-  role_name             = format("ecs-task-execution-role-%s-%s", local.name, local.aws_env)
+  role_name             = "ecs-task-execution-role-${local.aws_name}"
   trusted_role_services = ["ecs-tasks.amazonaws.com"]
   custom_role_policy_arns = [
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
@@ -176,30 +180,30 @@ module "ecs_task_execution_role" {
   create_user             = false
   create_instance_profile = false
   policy                  = templatefile("${path.module}/task_execution_custom_policy.tpl.json", { env = local.aws_env, app = local.name, region = data.aws_region.current.name, account = data.aws_caller_identity.current.account_id })
-  policy_name             = format("ecs-task-execution-policy-%s-%s", local.name, local.aws_env)
+  policy_name             = "ecs-task-execution-policy-${local.aws_name}"
 }
 
 module "ecs_task_role" {
   source = "./modules/iam/"
 
-  role_name               = format("ecs-task-role-%s-%s", local.name, local.aws_env)
+  role_name               = "ecs-task-role-${local.aws_name}"
   trusted_role_services   = ["ecs-tasks.amazonaws.com"]
   create_user             = false
   create_instance_profile = false
   policy                  = templatefile("${path.module}/task_custom_policy.tpl.json", { region = data.aws_region.current.name, account = data.aws_caller_identity.current.account_id })
-  policy_name             = format("ecs-task-policy-%s-%s", local.name, local.aws_env)
+  policy_name             = "ecs-task-policy-${local.aws_name}"
 }
 
 module "ecs_cluster" {
   source = "./modules/ecs"
 
-  name                              = local.name
+  name                              = local.aws_name
   link_ecs_to_asg_capacity_provider = true
 
   # ASG
   asg_create                            = true
-  asg_name                              = local.name
-  asg_instance_name                     = local.name
+  asg_name                              = local.aws_name
+  asg_instance_name                     = local.aws_name
   asg_min_size                          = "2"
   asg_max_size                          = "4"
   asg_desired_capacity                  = "2"
@@ -211,69 +215,69 @@ module "ecs_cluster" {
   asg_instance_type            = "m5.2xlarge"
   asg_volume_size              = "30"
   asg_iam_instance_profile_arn = module.ecs_instance_role.iam_instance_profile_arn
-  asg_user_data_base64         = base64encode(templatefile("${path.module}/user_data.toml", { name = local.name }))
+  asg_user_data_base64         = base64encode(templatefile("${path.module}/user_data.toml", { name = local.aws_name }))
 
   # Service
-  service_map                 = local.service_map
+  service_map                     = local.service_map
   service_task_execution_role_arn = module.ecs_task_execution_role.iam_role_arn
   service_task_role_arn           = module.ecs_task_role.iam_role_arn
   # service_subnets             = [data.aws_ssm_parameter.private_subnets.value]
   # service_subnets             = ["subnet-083e1b4fecfb9680b","subnet-0d8846d6bffdb06ed","subnet-0d19ac19f27184b07"]
-  service_subnets             = split(",", data.aws_ssm_parameter.private_subnets.value)
-  service_security_groups     = [aws_security_group.ecs_sg.id]
+  service_subnets         = split(",", data.aws_ssm_parameter.private_subnets.value)
+  service_security_groups = [aws_security_group.ecs_sg.id]
 }
 
 resource "aws_security_group" "lb_sg" {
-  name        = format("%s-lb-sg", local.name)
+  name        = "lb-sg-${local.aws_name}"
   description = "Allow inbound traffic"
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
 
   ingress {
-    description      = "Allow HTTP inbound traffic on the load balancer listener port"
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
+    description = "Allow HTTP inbound traffic on the load balancer listener port"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    description      = "Allow HTTPS inbound traffic on the load balancer listener port"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
+    description = "Allow HTTPS inbound traffic on the load balancer listener port"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
 resource "aws_security_group_rule" "lb_sg_egress" {
-  type = "egress"
-  from_port = 3000
-  to_port = 3000
-  protocol = "tcp"
-  security_group_id = "${aws_security_group.lb_sg.id}"
-  source_security_group_id = "${aws_security_group.ecs_sg.id}"
+  type                     = "egress"
+  from_port                = 3000
+  to_port                  = 3000
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.lb_sg.id
+  source_security_group_id = aws_security_group.ecs_sg.id
 }
 
 resource "aws_security_group_rule" "lb_sg_allow_all" {
-  type = "egress"
-  from_port = 0
-  to_port = 0
-  protocol = "-1"
-  security_group_id = "${aws_security_group.lb_sg.id}"
-  cidr_blocks = [ "0.0.0.0/0" ]
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  security_group_id = aws_security_group.lb_sg.id
+  cidr_blocks       = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group" "ecs_sg" {
-  name        = format("%s-ecs-sg", local.name)
+  name        = "ecs-sg-${local.aws_name}"
   description = "Allow inbound traffic"
   vpc_id      = data.aws_ssm_parameter.vpc_id.value
 
   ingress {
-    description = "Allow inbound traffic from the load balancer"
-    from_port   = 3000
-    to_port     = 3000
-    protocol    = "tcp"
-    security_groups = [ aws_security_group.lb_sg.id ]
+    description     = "Allow inbound traffic from the load balancer"
+    from_port       = 3000
+    to_port         = 3000
+    protocol        = "tcp"
+    security_groups = [aws_security_group.lb_sg.id]
   }
 
   egress {

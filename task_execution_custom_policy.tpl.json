@@ -16,7 +16,7 @@
                 "logs:CreateLogGroup"
             ],
             "Resource": [
-                "arn:aws:logs:*:*:log-group:/ecs/awedio/*"
+                "arn:aws:logs:*:*:log-group:/aws/ecs/ecs-radio-awedio-*/*"
             ]
         }
     ]

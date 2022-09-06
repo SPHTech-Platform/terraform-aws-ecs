@@ -29,9 +29,9 @@ module "container_awedio_nextjs" {
   log_configuration = {
     logDriver = "awslogs"
     options = {
-      "awslogs-group" : "/ecs/awedio/awedio-nextjs",
+      "awslogs-group" : "/aws/ecs/ecs-radio-awedio-dev/awedio-nextjs",
       "awslogs-region" : "ap-southeast-1",
-      "awslogs-stream-prefix" : "ecs",
+      "awslogs-stream-prefix" : "aws",
       "awslogs-create-group" : "true"
     }
     secretOptions = null

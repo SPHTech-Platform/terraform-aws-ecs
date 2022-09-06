@@ -8,7 +8,7 @@ variable "name" {
 # ECS
 ##############################
 variable "link_ecs_to_asg_capacity_provider" {
-  description = "Specify whether link ECS to autoscaling group capacity provider"
+  description = "Specify whether to link ECS to autoscaling group capacity provider"
   type        = bool
   default     = false
 }
@@ -16,24 +16,6 @@ variable "link_ecs_to_asg_capacity_provider" {
 ##############################
 # ECS - service
 ##############################
-variable "task_cpu" {
-  description = "Number of cpu units used by the task. If the requires_compatibilities is FARGATE this field is required."
-  type        = number
-  default     = 256
-}
-
-variable "task_memory" {
-  description = "Amount (in MiB) of memory used by the task. If the requires_compatibilities is FARGATE this field is required."
-  type        = number
-  default     = 512
-}
-
-variable "desired_count" {
-  description = "Number of instances of the task definition to place and keep running. "
-  default     = 1
-  type        = number
-}
-
 variable "service_map" {
   description = "A map of services to deploy"
   type        = map(any)
@@ -125,33 +107,6 @@ variable "asg_health_check_type" {
   default     = "ELB"
 }
 
-variable "asg_subnets" {
-  description = "A list of subnet IDs to launch resources in. Subnets automatically determine which availability zones the group will reside. Conflicts with `availability_zones`"
-  type        = list(string)
-  default     = null
-}
-
-################################################################################
-# Autoscaling group - policy
-################################################################################
-variable "service_min_capacity" {
-  description = "Minimum capacity of ECS autoscaling target, cannot be more than max_capacity"
-  type        = number
-  default     = 1
-}
-
-variable "service_max_capacity" {
-  description = "Maximum capacity of ECS autoscaling target, cannot be less than min_capacity"
-  type        = number
-  default     = 4
-}
-
-variable "service_target_cpu_value" {
-  description = "Autoscale when CPU Usage value over the specified value. Must be specified if `enable_cpu_based_autoscaling` is `true`."
-  type        = number
-  default     = 70
-}
-
 ################################################################################
 # Autoscaling group - launch template
 ################################################################################
@@ -197,6 +152,11 @@ variable "asg_user_data_base64" {
   default     = null
 }
 
+variable "asg_volume_size" {
+  description = "Specify the volume size for the root ebs"
+  type        = string
+}
+
 variable "asg_iam_instance_profile_arn" {
   description = "The IAM Instance Profile ARN to launch the instance with"
   type        = string
@@ -204,16 +164,14 @@ variable "asg_iam_instance_profile_arn" {
 }
 
 ################################################################################
-# Autoscaling group - block
-################################################################################
-variable "asg_volume_size" {
-  description = "Specify the volume size for the root ebs"
-  type        = string
-}
-
-################################################################################
 # Autoscaling group - network
 ################################################################################
+variable "asg_subnets" {
+  description = "A list of subnet IDs to launch resources in. Subnets automatically determine which availability zones the group will reside. Conflicts with `availability_zones`"
+  type        = list(string)
+  default     = null
+}
+
 variable "asg_network_interface_security_groups" {
   description = "A list of security group IDs to associate"
   type        = list(string)
@@ -224,6 +182,27 @@ variable "asg_placement" {
   description = "The placement of the instance"
   type        = map(string)
   default     = null
+}
+
+################################################################################
+# Autoscaling group - policy
+################################################################################
+variable "service_min_capacity" {
+  description = "Minimum capacity of ECS autoscaling target, cannot be more than max_capacity"
+  type        = number
+  default     = 1
+}
+
+variable "service_max_capacity" {
+  description = "Maximum capacity of ECS autoscaling target, cannot be less than min_capacity"
+  type        = number
+  default     = 4
+}
+
+variable "service_target_cpu_value" {
+  description = "Autoscale when CPU Usage value over the specified value. Must be specified if `enable_cpu_based_autoscaling` is `true`."
+  type        = number
+  default     = 70
 }
 
 ################################################################################
