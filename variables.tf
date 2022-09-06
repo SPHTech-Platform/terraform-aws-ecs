@@ -125,7 +125,7 @@ variable "asg_image_id" {
 variable "asg_instance_type" {
   description = "The type of the instance to launch"
   type        = string
-  default     = ""
+  default     = "t2.micro"
 }
 
 variable "asg_ebs_optimized" {

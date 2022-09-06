@@ -1,290 +1,71 @@
-locals {
-  name        = "awedio"
-  domain_name = "sandbox-653505252669.platform.sphdigital.com.sg"
+module "autoscaling_group" {
+  source = "./modules/autoscaling-group"
 
-  aws_app_prefix = "radio"
-  aws_app_name   = "awedio"
-  aws_env        = "dev"
-  aws_name       = "${local.aws_app_prefix}-${local.aws_app_name}-${local.aws_env}"
+  create = var.asg_create
 
-  # mandatory_tags = {
-  #   env         = "dev"
-  #   app_tier    = "2"
-  #   appteam     = "SPH Radio Agile Team"
-  #   cost_centre = "4000"
-  #   product     = "SPH Radio"
-  #   biz_dept    = "DPE"
-  # }
+  name          = var.asg_name
+  instance_name = var.asg_instance_name
 
-  # map_migrated = "d-server-00fyc0pr7gc8hv"
+  min_size                        = var.asg_min_size
+  max_size                        = var.asg_max_size
+  desired_capacity                = var.asg_desired_capacity
+  ignore_desired_capacity_changes = var.asg_ignore_desired_capacity_changes
+  wait_for_capacity_timeout       = var.asg_wait_for_capacity_timeout
+  protect_from_scale_in           = var.asg_protect_from_scale_in
+  health_check_type               = var.asg_health_check_type
 
-  # standard_tags = merge(
-  #   { for k, v in local.mandatory_tags : "sph:${replace(k, "_", "-")}" => v if v != null && v != "" },
-  #   { map-migrated = local.map_migrated },
-  # )
+  launch_template_description = var.asg_launch_template_description
+  image_id                    = var.asg_image_id
+  instance_type               = var.asg_instance_type
+  ebs_optimized               = var.asg_ebs_optimized
+  enable_monitoring           = var.asg_enable_monitoring
+  enabled_metrics             = var.asg_enabled_metrics
+  user_data_base64            = var.asg_user_data_base64
+  volume_size                 = var.asg_volume_size
 
-  service_map = {
-    nextjs = {
-      create          = true
-      service_scaling = true
-      service_container_definitions = jsonencode([
-        module.container_awedio_nextjs.json_map_object
-      ])
-      service_task_cpu      = 256
-      service_task_memory   = 512
-      service_desired_count = 1
-      ecs_load_balancers = [
-        {
-          target_group_arn = element(module.alb.target_group_arns, 0),
-          container_name   = "awedio-nextjs",
-          container_port   = "3000"
-        }
-      ]
-    }
-    # wordpress = {
-    #   create          = true
-    #   service_scaling = true
-    #   container_definitions = jsonencode([
-    #     module.container_awedio_nextjs.json_map_object
-    #   ])
-    #   task_cpu      = 256
-    #   task_memory   = 512
-    #   desired_count = 1
-    #   # ecs_load_balancers = [
-    #   #   {
-    #   #     target_group_arn = element(module.alb.target_group_arns, 0),
-    #   #     container_name   = "cook",
-    #   #     container_port   = "8101"
-    #   #   },
-    #   # ]
-    # }
-  }
+  iam_instance_profile_arn = var.asg_iam_instance_profile_arn
+
+  subnets                           = var.asg_subnets
+  network_interface_security_groups = var.asg_network_interface_security_groups
+  placement                         = var.asg_placement
 }
 
-##### Manually created in AWS console #####
-# module "zones" {
-#   source  = "terraform-aws-modules/route53/aws//modules/zones"
-#   version = "~> 1.0"
+module "cluster" {
+  source = "./modules/cluster"
 
-#   zones = {
-#     "${local.domain_name}" = {
-#       tags = {
-#         env = "development"
-#       }
-#     }
-#   }
-# }
-
-module "acm" {
-  source  = "terraform-aws-modules/acm/aws"
-  version = "~> 4.0"
-
-  domain_name = local.domain_name
-  # zone_id     = keys(module.zones.route53_zone_zone_id)[0]
-  zone_id = "Z01336191IWO7D9W5I8XT"
-
-  subject_alternative_names = [
-    "*.${local.domain_name}",
-  ]
-
-  wait_for_validation = false
-
-  tags = {
-    Name = local.domain_name
-  }
+  name                              = var.name
+  link_ecs_to_asg_capacity_provider = var.link_ecs_to_asg_capacity_provider
+  asg_arn                           = module.autoscaling_group.autoscaling_group_arn
 }
 
-module "alb" {
-  source  = "terraform-aws-modules/alb/aws"
-  version = "~> 6.0"
+module "service" {
+  for_each = { for k, v in var.service_map : k => v if v.create }
 
-  name = "alb-${local.aws_name}"
+  source                = "./modules/service"
+  name                  = format("%s-%s", var.name, replace(each.key, "_", "-"))
+  cluster_id            = module.cluster.ecs_cluster_id
+  container_definitions = each.value.service_container_definitions
+  task_cpu              = each.value.service_task_cpu
+  task_memory           = each.value.service_task_memory
+  desired_count         = each.value.service_desired_count
+  execution_role_arn    = var.service_task_execution_role_arn
+  task_role_arn         = var.service_task_role_arn
+  subnets               = var.service_subnets
+  security_groups       = var.service_security_groups
 
-  internal           = false
-  load_balancer_type = "application"
-  vpc_id             = data.aws_ssm_parameter.vpc_id.value
-  security_groups    = [aws_security_group.lb_sg.id]
-  # subnets            = [ data.aws_ssm_parameter.public_subnets.value ]
-  subnets = split(",", data.aws_ssm_parameter.public_subnets.value)
-
-  listener_ssl_policy_default = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
-
-
-  https_listeners = [
-    {
-      port               = 443
-      protocol           = "HTTPS"
-      certificate_arn    = module.acm.acm_certificate_arn
-      target_group_index = 0
-    }
-  ]
-
-  http_tcp_listeners = [
-    {
-      port        = 80
-      protocol    = "HTTP"
-      action_type = "redirect"
-      redirect = {
-        port        = "443"
-        protocol    = "HTTPS"
-        status_code = "HTTP_301"
-      }
-    }
-  ]
-
-  target_groups = [
-    {
-      name             = "tg-nextjs-${local.aws_name}"
-      backend_protocol = "HTTP"
-      backend_port     = 3000
-      target_type      = "ip"
-      health_check = {
-        enabled             = true
-        interval            = 15
-        path                = "/api/probe/"
-        port                = "traffic-port"
-        healthy_threshold   = 2
-        unhealthy_threshold = 2
-        timeout             = 5
-        protocol            = "HTTP"
-        matcher             = "200"
-      }
-    }
-  ]
-
-  tags = { "Name" : "${local.aws_name}" }
-
-  target_group_tags = { Name = "${local.aws_name}" }
+  ecs_load_balancers = each.value.ecs_load_balancers
 }
 
-module "ecs_instance_role" {
-  source = "./modules/iam"
+module "service_cpu_autoscaling_policy" {
+  for_each = { for k, v in var.service_map : k => v if v.service_scaling }
 
-  role_name             = "ecs-instance-role-${local.aws_name}"
-  trusted_role_services = ["ec2.amazonaws.com"]
-  custom_role_policy_arns = [
-    "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
-  ]
-  create_user             = false
-  create_instance_profile = true
+  source = "./modules/autoscaling-policy"
+
+  name                             = format("%s-%s", var.name, replace(each.key, "_", "-"))
+  enable_ecs_cpu_based_autoscaling = true
+  min_capacity                     = var.service_min_capacity
+  max_capacity                     = var.service_max_capacity
+  target_cpu_value                 = var.service_target_cpu_value
+  ecs_cluster_name                 = module.cluster.ecs_cluster_name
+  ecs_service_name                 = module.service[each.key].ecs_service_name
 }
-
-module "ecs_task_execution_role" {
-  source = "./modules/iam"
-
-  role_name             = "ecs-task-execution-role-${local.aws_name}"
-  trusted_role_services = ["ecs-tasks.amazonaws.com"]
-  custom_role_policy_arns = [
-    "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-  ]
-  create_user             = false
-  create_instance_profile = false
-  policy                  = templatefile("${path.module}/task_execution_custom_policy.tpl.json", { env = local.aws_env, app = local.name, region = data.aws_region.current.name, account = data.aws_caller_identity.current.account_id })
-  policy_name             = "ecs-task-execution-policy-${local.aws_name}"
-}
-
-module "ecs_task_role" {
-  source = "./modules/iam/"
-
-  role_name               = "ecs-task-role-${local.aws_name}"
-  trusted_role_services   = ["ecs-tasks.amazonaws.com"]
-  create_user             = false
-  create_instance_profile = false
-  policy                  = templatefile("${path.module}/task_custom_policy.tpl.json", { region = data.aws_region.current.name, account = data.aws_caller_identity.current.account_id })
-  policy_name             = "ecs-task-policy-${local.aws_name}"
-}
-
-module "ecs_cluster" {
-  source = "./modules/ecs"
-
-  name                              = local.aws_name
-  link_ecs_to_asg_capacity_provider = true
-
-  # ASG
-  asg_create                            = true
-  asg_name                              = local.aws_name
-  asg_instance_name                     = local.aws_name
-  asg_min_size                          = "2"
-  asg_max_size                          = "4"
-  asg_desired_capacity                  = "2"
-  asg_protect_from_scale_in             = true
-  asg_subnets                           = [data.aws_ssm_parameter.private_subnets.value]
-  asg_network_interface_security_groups = [aws_security_group.ecs_sg.id]
-  # asg_image_id                          = "ami-01f890f0ede139c03" # bottlerocket AMI
-  asg_image_id                 = data.aws_ssm_parameter.bottlerocket_ami.value
-  asg_instance_type            = "m5.2xlarge"
-  asg_volume_size              = "30"
-  asg_iam_instance_profile_arn = module.ecs_instance_role.iam_instance_profile_arn
-  asg_user_data_base64         = base64encode(templatefile("${path.module}/user_data.toml", { name = local.aws_name }))
-
-  # Service
-  service_map                     = local.service_map
-  service_task_execution_role_arn = module.ecs_task_execution_role.iam_role_arn
-  service_task_role_arn           = module.ecs_task_role.iam_role_arn
-  # service_subnets             = [data.aws_ssm_parameter.private_subnets.value]
-  # service_subnets             = ["subnet-083e1b4fecfb9680b","subnet-0d8846d6bffdb06ed","subnet-0d19ac19f27184b07"]
-  service_subnets         = split(",", data.aws_ssm_parameter.private_subnets.value)
-  service_security_groups = [aws_security_group.ecs_sg.id]
-}
-
-resource "aws_security_group" "lb_sg" {
-  name        = "lb-sg-${local.aws_name}"
-  description = "Allow inbound traffic"
-  vpc_id      = data.aws_ssm_parameter.vpc_id.value
-
-  ingress {
-    description = "Allow HTTP inbound traffic on the load balancer listener port"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description = "Allow HTTPS inbound traffic on the load balancer listener port"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-resource "aws_security_group_rule" "lb_sg_egress" {
-  type                     = "egress"
-  from_port                = 3000
-  to_port                  = 3000
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.lb_sg.id
-  source_security_group_id = aws_security_group.ecs_sg.id
-}
-
-resource "aws_security_group_rule" "lb_sg_allow_all" {
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "-1"
-  security_group_id = aws_security_group.lb_sg.id
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-
-resource "aws_security_group" "ecs_sg" {
-  name        = "ecs-sg-${local.aws_name}"
-  description = "Allow inbound traffic"
-  vpc_id      = data.aws_ssm_parameter.vpc_id.value
-
-  ingress {
-    description     = "Allow inbound traffic from the load balancer"
-    from_port       = 3000
-    to_port         = 3000
-    protocol        = "tcp"
-    security_groups = [aws_security_group.lb_sg.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
