@@ -53,11 +53,11 @@ variable "deployment_controller_type" {
 #   default     = false
 # }
 
-variable "registry_arn" {
-  description = "ARN of the Service Registry.The currently supported service registry is Amazon Route 53 Auto Naming Service(aws_service_discovery_service) "
-  type        = string
-  default     = ""
-}
+# variable "registry_arn" {
+#   description = "ARN of the Service Registry.The currently supported service registry is Amazon Route 53 Auto Naming Service(aws_service_discovery_service) "
+#   type        = string
+#   default     = ""
+# }
 
 # variable "registry_port" {
 #   description = "Port value used if your Service Discovery service specified an SRV record"
@@ -164,11 +164,11 @@ variable "task_memory" {
   default     = 512
 }
 
-variable "deployment_controller" {
-  description = "Deployment controller"
-  type        = string
-  default     = "ECS"
-}
+# variable "deployment_controller" {
+#   description = "Deployment controller"
+#   type        = string
+#   default     = "ECS"
+# }
 
 # variable "volume_name" {
 #   description = "Volume name to be used for mapping"

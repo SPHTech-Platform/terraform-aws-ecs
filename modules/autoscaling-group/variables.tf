@@ -1,7 +1,7 @@
 variable "name" {
   description = "Name of the product/project/application"
   type        = string
-  default     = null
+  default     = ""
 }
 
 ################################################################################
@@ -85,7 +85,7 @@ variable "image_id" {
 variable "instance_type" {
   description = "The type of the instance to launch"
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "ebs_optimized" {

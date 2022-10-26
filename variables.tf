@@ -204,12 +204,3 @@ variable "service_target_cpu_value" {
   type        = number
   default     = 70
 }
-
-################################################################################
-# Tags
-################################################################################
-variable "tags" {
-  description = "A map of tags to assign to resources"
-  type        = map(string)
-  default     = {}
-}

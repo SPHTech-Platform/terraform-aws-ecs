@@ -54,6 +54,8 @@ module "service" {
   security_groups       = var.service_security_groups
 
   ecs_load_balancers = each.value.ecs_load_balancers
+
+  docker_volumes = try(each.value.docker_volumes, [])
 }
 
 module "service_cpu_autoscaling_policy" {
