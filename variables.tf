@@ -44,6 +44,18 @@ variable "service_security_groups" {
   default     = []
 }
 
+variable "service_deployment_maximum_percent" {
+  description = "Upper limit (as a percentage of the service's desiredCount) of the number of running tasks that can be running in a service during a deployment. Not valid when using the DAEMON scheduling strategy."
+  type        = number
+  default     = 200
+}
+
+variable "service_deployment_minimum_healthy_percent" {
+  description = "Lower limit (as a percentage of the service's desiredCount) of the number of running tasks that must remain running and healthy in a service during a deployment."
+  type        = number
+  default     = 100
+}
+
 ################################################################################
 # Autoscaling group
 ################################################################################

@@ -28,7 +28,7 @@ module "container_httpd" {
       sourceVolume  = "config_volume"
     }
   ]
-  
+
   container_memory_reservation = 128
   environment                  = local.container_env_list
 }

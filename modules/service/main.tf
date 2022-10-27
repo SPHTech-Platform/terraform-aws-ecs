@@ -1,6 +1,3 @@
-# terraform {
-#   experiments = [module_variable_optional_attrs]
-# }
 locals {
   # launch_types           = ["EC2", "FARGATE"]
   # platform_versions      = ["LATEST", "1.4.0", "1.3.0"]
@@ -94,6 +91,9 @@ resource "aws_ecs_service" "this" {
   desired_count           = var.desired_count
   enable_ecs_managed_tags = var.enable_ecs_managed_tags
   propagate_tags          = var.propagate_tags
+
+  deployment_maximum_percent         = var.deployment_maximum_percent
+  deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
 
   deployment_controller {
     type = var.deployment_controller_type

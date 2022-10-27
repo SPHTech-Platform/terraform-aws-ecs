@@ -49,12 +49,6 @@ variable "user_name" {
 ################################################################################
 # IAM Policy
 ################################################################################
-# variable "create_policy" {
-#   description = "Whether to create the IAM policy"
-#   type        = bool
-#   default     = true
-# }
-
 variable "policy_name" {
   description = "The name of the policy"
   type        = string

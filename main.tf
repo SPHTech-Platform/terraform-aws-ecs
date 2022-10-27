@@ -53,6 +53,9 @@ module "service" {
   subnets               = var.service_subnets
   security_groups       = var.service_security_groups
 
+  deployment_maximum_percent         = var.service_deployment_maximum_percent
+  deployment_minimum_healthy_percent = var.service_deployment_minimum_healthy_percent
+
   ecs_load_balancers = each.value.ecs_load_balancers
 
   docker_volumes = try(each.value.docker_volumes, [])
