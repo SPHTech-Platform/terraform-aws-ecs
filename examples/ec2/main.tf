@@ -19,6 +19,7 @@ module "ecs_cluster" {
   asg_volume_size                       = "30"
   asg_iam_instance_profile_arn          = module.ecs_instance_role.iam_instance_profile_arn
   asg_user_data_base64                  = base64encode(local_file.user_data.content)
+  asg_ignore_desired_capacity_changes   = true
 
   # Service
   service_map                     = local.service_map
