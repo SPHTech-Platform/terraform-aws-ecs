@@ -2,7 +2,7 @@ data "aws_region" "current" {}
 
 data "aws_caller_identity" "current" {}
 
-data "aws_vpc" "default" {} 
+data "aws_vpc" "default" {}
 
 data "aws_subnets" "public" {
   filter {
@@ -13,7 +13,7 @@ data "aws_subnets" "public" {
 
 data "aws_subnets" "private" {
   filter {
-    name = "tag:Name"
+    name   = "tag:Name"
     values = ["*app*"]
   }
 }

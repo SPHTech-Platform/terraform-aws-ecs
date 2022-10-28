@@ -15,19 +15,6 @@ module "iam_assumable_role" {
   tags = merge(var.tags, { "Name" = var.role_name })
 }
 
-
-module "iam_user" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-user"
-  version = "~> 4.13.0"
-
-  create_user                   = var.create_user
-  name                          = var.user_name
-  create_iam_user_login_profile = false
-
-  tags = merge(var.tags, { "Name" = var.user_name })
-}
-
-
 module "iam_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "~> 4.13.0"
@@ -40,17 +27,9 @@ module "iam_policy" {
   tags = merge(var.tags, { "Name" = var.policy_name })
 }
 
-
 resource "aws_iam_role_policy_attachment" "attach" {
   count = length(var.policy) > 0 ? 1 : 0
 
   role       = module.iam_assumable_role.iam_role_name
-  policy_arn = module.iam_policy.arn
-}
-
-resource "aws_iam_user_policy_attachment" "attach" {
-  count = var.create_user ? 1 : 0
-
-  user       = module.iam_user.iam_user_name
   policy_arn = module.iam_policy.arn
 }

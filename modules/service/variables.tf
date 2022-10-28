@@ -119,7 +119,6 @@ variable "deployment_minimum_healthy_percent" {
 variable "container_definitions" {
   description = "A list of container definitions in JSON format that describe the different containers that make up your task"
   type        = string
-  default     = ""
 }
 
 variable "task_cpu" {

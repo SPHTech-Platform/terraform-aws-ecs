@@ -38,7 +38,6 @@ module "ecs_instance_role" {
     "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role",
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
   ]
-  create_user             = false
   create_instance_profile = true
 }
 
@@ -50,7 +49,6 @@ module "ecs_task_execution_role" {
   custom_role_policy_arns = [
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
   ]
-  create_user             = false
   create_instance_profile = false
   policy                  = data.aws_iam_policy_document.execution_custom_policy.json
   policy_name             = "ecs-task-execution-policy-${var.name}"
@@ -61,7 +59,6 @@ module "ecs_task_role" {
 
   role_name               = "ecs-task-role-${var.name}-${local.stack}"
   trusted_role_services   = ["ecs-tasks.amazonaws.com"]
-  create_user             = false
   create_instance_profile = false
   policy                  = data.aws_iam_policy_document.task_custom_policy.json
   policy_name             = "ecs-task-policy-${var.name}-${local.stack}"

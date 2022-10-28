@@ -32,21 +32,6 @@ variable "custom_role_policy_arns" {
 }
 
 ################################################################################
-# IAM User
-################################################################################
-variable "create_user" {
-  description = "Whether to create the IAM user"
-  type        = bool
-  default     = true
-}
-
-variable "user_name" {
-  description = "Desired name for the IAM user"
-  type        = string
-  default     = null
-}
-
-################################################################################
 # IAM Policy
 ################################################################################
 variable "policy_name" {
