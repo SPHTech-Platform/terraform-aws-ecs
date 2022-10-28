@@ -91,26 +91,14 @@ variable "ordered_placement_strategy" {
 
 variable "ecs_load_balancers" {
   description = "Configuration block for load balancers."
-  # type = list(object({
-  #   container_name   = string
-  #   container_port   = number
-  #   elb_name         = optional(string)
-  #   target_group_arn = string
-  # }))
-  type    = list(any)
-  default = []
+  type        = list(any)
+  default     = []
 }
 
 variable "service_registries" {
   description = "Service discovery registries for the service. The maximum number of service_registries blocks is 1"
-  # type = list(object({
-  #   registry_arn   = string
-  #   container_name = string
-  #   container_port = number
-  #   port           = number
-  # }))
-  type    = list(any)
-  default = []
+  type        = list(any)
+  default     = []
 }
 
 variable "deployment_maximum_percent" {
@@ -171,37 +159,12 @@ variable "task_placement_constraints" {
 # Volume Config
 ################################################################################
 variable "efs_volumes" {
-  # type = list(object({
-  #   host_path = string
-  #   name      = string
-  #   efs_volume_configuration = list(object({
-  #     file_system_id          = string
-  #     root_directory          = string
-  #     transit_encryption      = optional(string)
-  #     transit_encryption_port = optional(string)
-  #     authorization_config = optional(list(object({
-  #       access_point_id = string
-  #       iam             = string
-  #     })))
-  #   }))
-  # }))
   description = "Task EFS volume definitions as list of configuration objects. You cannot define both Docker volumes and EFS volumes on the same task definition."
   type        = list(any)
   default     = []
 }
 
 variable "docker_volumes" {
-  # type = list(object({
-  #   host_path = string
-  #   name      = string
-  #   docker_volume_configuration = list(object({
-  #     autoprovision = bool
-  #     driver        = string
-  #     driver_opts   = map(string)
-  #     labels        = map(string)
-  #     scope         = string
-  #   }))
-  # }))
   description = "Task docker volume definitions as list of configuration objects. You cannot define both Docker volumes and EFS volumes on the same task definition."
   type        = list(any)
   default     = []

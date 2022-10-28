@@ -1,9 +1,4 @@
 locals {
-  # launch_types           = ["EC2", "FARGATE"]
-  # platform_versions      = ["LATEST", "1.4.0", "1.3.0"]
-  # network_mode_types     = ["awsvpc", "none", "bridge", "host"]
-  # deployment_controllers = ["ECS", "CODE_DEPLOY"]
-
   volumes = concat(var.docker_volumes, var.efs_volumes)
 }
 
