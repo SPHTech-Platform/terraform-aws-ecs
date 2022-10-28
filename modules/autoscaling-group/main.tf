@@ -42,7 +42,7 @@ module "asg" {
         delete_on_termination = true
         encrypted             = true
         volume_size           = var.volume_size
-        volume_type           = "gp2"
+        volume_type           = "gp3"
       }
     }
   ]
