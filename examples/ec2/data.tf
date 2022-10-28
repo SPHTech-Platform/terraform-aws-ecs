@@ -2,16 +2,20 @@ data "aws_region" "current" {}
 
 data "aws_caller_identity" "current" {}
 
-data "aws_ssm_parameter" "vpc_id" {
-  name = "/aft/provisioned/vpc/vpc_id"
+data "aws_vpc" "default" {} 
+
+data "aws_subnets" "public" {
+  filter {
+    name   = "tag:Name"
+    values = ["*public*"]
+  }
 }
 
-data "aws_ssm_parameter" "private_subnets" {
-  name = "/aft/provisioned/vpc/private_subnets"
-}
-
-data "aws_ssm_parameter" "public_subnets" {
-  name = "/aft/provisioned/vpc/public_subnets"
+data "aws_subnets" "private" {
+  filter {
+    name = "tag:Name"
+    values = ["*db*"]
+  }
 }
 
 data "aws_ssm_parameter" "bottlerocket_ami" {

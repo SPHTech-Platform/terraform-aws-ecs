@@ -2,7 +2,7 @@ resource "aws_security_group" "ecs_sg" {
   #checkov:skip=CKV2_AWS_5:Security group is attached to another resource
   name        = "ecs-sg-${var.name}"
   description = "Allow inbound traffic"
-  vpc_id      = data.aws_ssm_parameter.vpc_id.value
+  vpc_id      = data.aws_vpc.default.id
 
   ingress {
     description     = "Allow inbound traffic from the load balancer"
@@ -26,7 +26,7 @@ resource "aws_security_group" "lb_public_sg" {
   #checkov:skip=CKV2_AWS_5:Security group is attached to another resource
   name        = "lb-public-sg-${var.name}"
   description = "Allow inbound traffic"
-  vpc_id      = data.aws_ssm_parameter.vpc_id.value
+  vpc_id      = data.aws_vpc.default.id
 
   ingress {
     description = "Allow HTTP inbound traffic on the load balancer listener port"

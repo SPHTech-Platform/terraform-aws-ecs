@@ -6,9 +6,9 @@ module "alb" {
 
   internal           = false
   load_balancer_type = "application"
-  vpc_id             = data.aws_ssm_parameter.vpc_id.value
+  vpc_id             = data.aws_vpc.default.id
   security_groups    = [aws_security_group.lb_public_sg.id]
-  subnets            = split(",", data.aws_ssm_parameter.public_subnets.value)
+  subnets            = data.aws_subnets.public.ids
 
   listener_ssl_policy_default = "ELBSecurityPolicy-FS-1-2-Res-2020-10"
 

@@ -12,7 +12,7 @@ module "ecs_cluster" {
   asg_max_size                          = "4"
   asg_desired_capacity                  = "2"
   asg_protect_from_scale_in             = true
-  asg_subnets                           = split(",", data.aws_ssm_parameter.private_subnets.value)
+  asg_subnets                           = data.aws_subnets.private.ids
   asg_network_interface_security_groups = [aws_security_group.ecs_sg.id]
   asg_image_id                          = data.aws_ssm_parameter.bottlerocket_ami.value
   asg_instance_type                     = "m5.2xlarge"
@@ -24,7 +24,7 @@ module "ecs_cluster" {
   service_map                     = local.service_map
   service_task_execution_role_arn = module.ecs_task_execution_role.iam_role_arn
   service_task_role_arn           = module.ecs_task_role.iam_role_arn
-  service_subnets                 = split(",", data.aws_ssm_parameter.private_subnets.value)
+  service_subnets                 = data.aws_subnets.private.ids
   service_security_groups         = [aws_security_group.ecs_sg.id]
 }
 
