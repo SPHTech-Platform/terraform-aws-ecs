@@ -5,9 +5,9 @@ module "asg" {
   create = var.create
 
   # Autoscaling group
-  name            = format("asg-%s", var.name)
+  name            = "asg-${var.name}"
   use_name_prefix = true
-  instance_name   = format("ec2-asg-%s", var.instance_name)
+  instance_name   = "ec2-asg-${var.instance_name}"
 
   min_size                        = var.min_size
   max_size                        = var.max_size
@@ -20,7 +20,7 @@ module "asg" {
 
   # Launch template
   create_launch_template      = true
-  launch_template_name        = format("lt-%s", var.name)
+  launch_template_name        = "lt-${var.name}"
   launch_template_description = var.launch_template_description
   update_default_version      = true
 
