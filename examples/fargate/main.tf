@@ -1,9 +1,9 @@
 module "fargate_cluster" {
   source = "../../"
 
-  name                   = "fargate-example"
-  launch_type            = "FARGATE"
-  platform_version       = "1.4.0"
+  name             = "fargate-example"
+  launch_type      = "FARGATE"
+  platform_version = "1.4.0"
 
   service_task_execution_role_arn = module.ecs_task_execution_role.iam_role_arn
   service_task_role_arn           = module.ecs_task_role.iam_role_arn
