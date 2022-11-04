@@ -2,7 +2,7 @@ module "asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "~> 5.1"
 
-  create = var.create && var.launch_type != "FARGATE"
+  create = var.create && var.launch_type == "EC2"
 
   # Autoscaling group
   name            = "asg-${var.name}"
@@ -19,7 +19,7 @@ module "asg" {
   vpc_zone_identifier             = var.subnets
 
   # Launch template
-  create_launch_template      = var.create_launch_template && var.launch_type != "FARGATE"
+  create_launch_template      = var.create_launch_template && var.launch_type == "EC2"
   launch_template_name        = "lt-${var.name}"
   launch_template_description = var.launch_template_description
   update_default_version      = true
