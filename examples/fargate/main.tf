@@ -4,14 +4,12 @@ module "fargate_cluster" {
   name                   = "fargate-example"
   launch_type            = "FARGATE"
   platform_version       = "1.4.0"
-  create_launch_template = false
 
   service_task_execution_role_arn = module.ecs_task_execution_role.iam_role_arn
   service_task_role_arn           = module.ecs_task_role.iam_role_arn
   service_map                     = local.service_map
   service_subnets                 = data.aws_subnets.private.ids
   service_security_groups         = [aws_security_group.ecs_sg.id]
-  assign_public_ip                = true
 }
 
 module "ecs_task_execution_role" {

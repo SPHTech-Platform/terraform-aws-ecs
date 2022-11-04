@@ -3,6 +3,7 @@ module "autoscaling_group" {
 
   create                 = var.asg_create
   create_launch_template = var.create_launch_template
+  launch_type            = var.launch_type
 
   name          = var.asg_name
   instance_name = var.asg_instance_name

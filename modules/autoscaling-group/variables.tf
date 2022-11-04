@@ -76,6 +76,12 @@ variable "create_launch_template" {
   default     = true
 }
 
+variable "launch_type" {
+  description = "Launch type"
+  type        = string
+  default     = "EC2"
+}
+
 variable "launch_template_description" {
   description = "Description of the launch template"
   type        = string
