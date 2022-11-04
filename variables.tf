@@ -16,6 +16,18 @@ variable "link_ecs_to_asg_capacity_provider" {
 ##############################
 # ECS - service
 ##############################
+variable "launch_type" {
+  type        = string
+  description = "The launch type on which to run your task.(EC2|FARGATE)"
+  default     = "EC2"
+}
+
+variable "platform_version" {
+  description = "Platform version (applicable for FARGATE launch type)"
+  type        = string
+  default     = "LATEST"
+}
+
 variable "service_map" {
   description = "A map of services to deploy"
   type        = map(any)
@@ -56,6 +68,12 @@ variable "service_deployment_minimum_healthy_percent" {
   default     = 100
 }
 
+variable "assign_public_ip" {
+  description = "Enable a public IP address for the container"
+  type        = bool
+  default     = false
+}
+
 ################################################################################
 # Autoscaling group
 ################################################################################
@@ -63,6 +81,12 @@ variable "asg_create" {
   description = "Specify whether to create ASG resource"
   type        = bool
   default     = false
+}
+
+variable "create_launch_template" {
+  description = "Create a launch template"
+  type        = bool
+  default     = true
 }
 
 variable "asg_name" {
@@ -167,6 +191,7 @@ variable "asg_user_data_base64" {
 variable "asg_volume_size" {
   description = "Specify the volume size for the root ebs"
   type        = string
+  default     = 30
 }
 
 variable "asg_iam_instance_profile_arn" {

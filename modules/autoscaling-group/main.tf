@@ -19,7 +19,7 @@ module "asg" {
   vpc_zone_identifier             = var.subnets
 
   # Launch template
-  create_launch_template      = true
+  create_launch_template      = var.create_launch_template
   launch_template_name        = "lt-${var.name}"
   launch_template_description = var.launch_template_description
   update_default_version      = true

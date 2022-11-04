@@ -70,6 +70,12 @@ variable "subnets" {
 ################################################################################
 # Autoscaling group - launch template
 ################################################################################
+variable "create_launch_template" {
+  description = "Create a launch template or not"
+  type        = bool
+  default     = true
+}
+
 variable "launch_template_description" {
   description = "Description of the launch template"
   type        = string
