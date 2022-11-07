@@ -11,7 +11,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.36.1 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.16 |
 | <a name="provider_local"></a> [local](#provider\_local) | 2.2.3 |
 
 ## Modules
@@ -46,7 +46,7 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_name"></a> [name](#input\_name) | Name of the product/project/application | `string` | `""` | no |
+| <a name="input_name"></a> [name](#input\_name) | Name of the product/project/application | `string` | `"ecs-ec2-example"` | no |
 | <a name="input_service_container_port"></a> [service\_container\_port](#input\_service\_container\_port) | Port on the container to associate with the load balancer. | `string` | `"80"` | no |
 
 ## Outputs

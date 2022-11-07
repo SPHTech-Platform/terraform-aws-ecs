@@ -20,6 +20,7 @@ module "asg" {
 
   # Launch template
   create_launch_template      = var.create_launch_template && var.launch_type == "EC2"
+  launch_template             = var.launch_template
   launch_template_name        = "lt-${var.name}"
   launch_template_description = var.launch_template_description
   update_default_version      = true
