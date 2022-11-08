@@ -1,7 +1,7 @@
 variable "name" {
   description = "Name of the product/project/application"
   type        = string
-  default     = "ecs-ec2-example"
+  default     = "ecs-fargate-example"
 }
 
 # ##############################

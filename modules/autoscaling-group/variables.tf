@@ -70,6 +70,24 @@ variable "subnets" {
 ################################################################################
 # Autoscaling group - launch template
 ################################################################################
+variable "create_launch_template" {
+  description = "Create a launch template or not"
+  type        = bool
+  default     = true
+}
+
+variable "launch_template" {
+  description = "Name of an existing launch template to be used (created outside of this module)"
+  type        = string
+  default     = null
+}
+
+variable "launch_type" {
+  description = "Launch type"
+  type        = string
+  default     = "EC2"
+}
+
 variable "launch_template_description" {
   description = "Description of the launch template"
   type        = string

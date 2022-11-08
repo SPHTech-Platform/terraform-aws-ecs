@@ -1,7 +1,9 @@
 module "autoscaling_group" {
   source = "./modules/autoscaling-group"
 
-  create = var.asg_create
+  create                 = var.asg_create
+  create_launch_template = var.create_launch_template
+  launch_type            = var.launch_type
 
   name          = var.asg_name
   instance_name = var.asg_instance_name
@@ -45,6 +47,7 @@ module "service" {
   name                  = format("%s-%s", var.name, replace(each.key, "_", "-"))
   cluster_id            = module.cluster.ecs_cluster_id
   container_definitions = each.value.service_container_definitions
+  launch_type           = var.launch_type
   task_cpu              = each.value.service_task_cpu
   task_memory           = each.value.service_task_memory
   desired_count         = each.value.service_desired_count
@@ -58,7 +61,8 @@ module "service" {
 
   ecs_load_balancers = each.value.ecs_load_balancers
 
-  docker_volumes = try(each.value.docker_volumes, [])
+  docker_volumes   = try(each.value.docker_volumes, [])
+  assign_public_ip = var.assign_public_ip
 }
 
 module "service_cpu_autoscaling_policy" {

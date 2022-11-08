@@ -10,13 +10,13 @@ repos:
     hooks:
       - id: terraform_fmt
       - id: terraform_validate
-        exclude: '_common|dev|modules/base/eks'
       - id: terraform_tflint
-        exclude: _common
         args:
           - --args=--module
           - --args=--config=__GIT_WORKING_DIR__/.tflint.hcl
       - id: terraform_docs
+        args:
+          - "--args=--lockfile=false"
       - id: terraform_tfsec
         args:
           - --args=--exclude-downloaded-modules
