@@ -1,4 +1,5 @@
 locals {
+  # tflint-ignore: terraform_unused_declarations
   stack = "httpd"
 
   container_env_list = [

@@ -22,6 +22,7 @@ variable "launch_type" {
   default     = "EC2"
 }
 
+# tflint-ignore: terraform_unused_declarations
 variable "platform_version" {
   description = "Platform version (applicable for FARGATE launch type)"
   type        = string
