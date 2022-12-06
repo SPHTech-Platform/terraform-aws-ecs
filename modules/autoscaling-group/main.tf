@@ -61,6 +61,8 @@ module "asg" {
     }
   ]
 
+  instance_market_options = var.instance_market_options
+
   placement = var.placement
   tags      = var.tags
 }

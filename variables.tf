@@ -144,6 +144,12 @@ variable "asg_health_check_type" {
   default     = "ELB"
 }
 
+variable "asg_instance_market_options" {
+  description = "The market (purchasing) option for the instance"
+  type        = any
+  default     = null
+}
+
 ################################################################################
 # Autoscaling group - launch template
 ################################################################################
