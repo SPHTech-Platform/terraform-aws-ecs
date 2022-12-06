@@ -36,13 +36,14 @@ variable "service_map" {
 }
 
 variable "service_task_execution_role_arn" {
-  description = "IAM role for ECS execution"
+  description = "Default IAM role for ECS execution"
   type        = string
 }
 
 variable "service_task_role_arn" {
-  description = "IAM role for ECS task"
+  description = "Default IAM role for ECS task"
   type        = string
+  default     = ""
 }
 
 variable "service_subnets" {

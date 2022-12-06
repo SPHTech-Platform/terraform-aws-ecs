@@ -63,8 +63,8 @@ No resources.
 | <a name="input_service_security_groups"></a> [service\_security\_groups](#input\_service\_security\_groups) | Security group IDs to attach to your ECS Service | `list(string)` | `[]` | no |
 | <a name="input_service_subnets"></a> [service\_subnets](#input\_service\_subnets) | Private subnets for ECS | `list(string)` | `[]` | no |
 | <a name="input_service_target_cpu_value"></a> [service\_target\_cpu\_value](#input\_service\_target\_cpu\_value) | Autoscale when CPU Usage value over the specified value. Must be specified if `enable_cpu_based_autoscaling` is `true`. | `number` | `70` | no |
-| <a name="input_service_task_execution_role_arn"></a> [service\_task\_execution\_role\_arn](#input\_service\_task\_execution\_role\_arn) | IAM role for ECS execution | `string` | n/a | yes |
-| <a name="input_service_task_role_arn"></a> [service\_task\_role\_arn](#input\_service\_task\_role\_arn) | IAM role for ECS task | `string` | n/a | yes |
+| <a name="input_service_task_execution_role_arn"></a> [service\_task\_execution\_role\_arn](#input\_service\_task\_execution\_role\_arn) | Default IAM role for ECS execution | `string` | n/a | yes |
+| <a name="input_service_task_role_arn"></a> [service\_task\_role\_arn](#input\_service\_task\_role\_arn) | Default IAM role for ECS task | `string` | `""` | no |
 
 ## Outputs
 

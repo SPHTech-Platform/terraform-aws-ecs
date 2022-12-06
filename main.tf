@@ -42,32 +42,33 @@ module "cluster" {
 }
 
 module "service" {
-  for_each = { for k, v in var.service_map : k => v if v.create }
+  for_each = { for k, v in var.service_map : k => v if lookup(v, "create", true) }
 
-  source                = "./modules/service"
+  source = "./modules/service"
+
   name                  = format("%s-%s", var.name, replace(each.key, "_", "-"))
   cluster_id            = module.cluster.ecs_cluster_id
-  container_definitions = each.value.service_container_definitions
+  container_definitions = lookup(each.value, "service_container_definitions", null)
   launch_type           = var.launch_type
-  task_cpu              = each.value.service_task_cpu
-  task_memory           = each.value.service_task_memory
-  desired_count         = each.value.service_desired_count
-  execution_role_arn    = var.service_task_execution_role_arn
-  task_role_arn         = var.service_task_role_arn
+  task_cpu              = lookup(each.value, "service_task_cpu", null)
+  task_memory           = lookup(each.value, "service_task_memory", null)
+  desired_count         = lookup(each.value, "service_desired_count", null)
+  execution_role_arn    = lookup(each.value, "execution_role_arn", var.service_task_execution_role_arn)
+  task_role_arn         = lookup(each.value, "task_role_arn", var.service_task_role_arn)
   subnets               = var.service_subnets
   security_groups       = var.service_security_groups
 
   deployment_maximum_percent         = var.service_deployment_maximum_percent
   deployment_minimum_healthy_percent = var.service_deployment_minimum_healthy_percent
 
-  ecs_load_balancers = each.value.ecs_load_balancers
+  ecs_load_balancers = lookup(each.value, "ecs_load_balancers", null)
 
-  docker_volumes   = try(each.value.docker_volumes, [])
+  docker_volumes   = lookup(each.value, "docker_volumes", [])
   assign_public_ip = var.assign_public_ip
 }
 
 module "service_cpu_autoscaling_policy" {
-  for_each = { for k, v in var.service_map : k => v if v.service_scaling }
+  for_each = { for k, v in var.service_map : k => v if lookup(v, "service_scaling", false) }
 
   source = "./modules/autoscaling-policy"
 
