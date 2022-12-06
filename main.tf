@@ -48,11 +48,11 @@ module "service" {
 
   name                  = format("%s-%s", var.name, replace(each.key, "_", "-"))
   cluster_id            = module.cluster.ecs_cluster_id
-  container_definitions = lookup(each.value, "service_container_definitions", null)
+  container_definitions = each.value.service_container_definitions
   launch_type           = var.launch_type
-  task_cpu              = lookup(each.value, "service_task_cpu", null)
-  task_memory           = lookup(each.value, "service_task_memory", null)
-  desired_count         = lookup(each.value, "service_desired_count", null)
+  task_cpu              = each.value.service_task_cpu
+  task_memory           = each.value.service_task_memory
+  desired_count         = each.value.service_desired_count
   execution_role_arn    = lookup(each.value, "execution_role_arn", var.service_task_execution_role_arn)
   task_role_arn         = lookup(each.value, "task_role_arn", var.service_task_role_arn)
   subnets               = var.service_subnets
@@ -61,7 +61,7 @@ module "service" {
   deployment_maximum_percent         = var.service_deployment_maximum_percent
   deployment_minimum_healthy_percent = var.service_deployment_minimum_healthy_percent
 
-  ecs_load_balancers = lookup(each.value, "ecs_load_balancers", null)
+  ecs_load_balancers = lookup(each.value, "ecs_load_balancers", [])
 
   docker_volumes   = lookup(each.value, "docker_volumes", [])
   assign_public_ip = var.assign_public_ip
