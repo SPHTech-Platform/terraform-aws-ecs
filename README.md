@@ -35,6 +35,7 @@ No resources.
 | <a name="input_asg_iam_instance_profile_arn"></a> [asg\_iam\_instance\_profile\_arn](#input\_asg\_iam\_instance\_profile\_arn) | The IAM Instance Profile ARN to launch the instance with | `string` | `null` | no |
 | <a name="input_asg_ignore_desired_capacity_changes"></a> [asg\_ignore\_desired\_capacity\_changes](#input\_asg\_ignore\_desired\_capacity\_changes) | Determines whether the `desired_capacity` value is ignored after initial apply. See README note for more details | `bool` | `true` | no |
 | <a name="input_asg_image_id"></a> [asg\_image\_id](#input\_asg\_image\_id) | The AMI from which to launch the instance | `string` | `""` | no |
+| <a name="input_asg_instance_market_options"></a> [asg\_instance\_market\_options](#input\_asg\_instance\_market\_options) | The market (purchasing) option for the instance | `any` | `null` | no |
 | <a name="input_asg_instance_name"></a> [asg\_instance\_name](#input\_asg\_instance\_name) | Name that is propogated to launched EC2 instances via a tag - if not provided, defaults to `var.name` | `string` | `""` | no |
 | <a name="input_asg_instance_type"></a> [asg\_instance\_type](#input\_asg\_instance\_type) | The type of the instance to launch | `string` | `"t2.micro"` | no |
 | <a name="input_asg_launch_template_description"></a> [asg\_launch\_template\_description](#input\_asg\_launch\_template\_description) | Description of the launch template | `string` | `null` | no |

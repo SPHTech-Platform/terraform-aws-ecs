@@ -24,6 +24,7 @@ module "autoscaling_group" {
   enabled_metrics             = var.asg_enabled_metrics
   user_data_base64            = var.asg_user_data_base64
   volume_size                 = var.asg_volume_size
+  instance_market_options     = var.asg_instance_market_options
 
   iam_instance_profile_arn = var.asg_iam_instance_profile_arn
 

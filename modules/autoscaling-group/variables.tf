@@ -136,6 +136,12 @@ variable "iam_instance_profile_arn" {
   default     = null
 }
 
+variable "instance_market_options" {
+  description = "The market (purchasing) option for the instance"
+  type        = any
+  default     = null
+}
+
 ################################################################################
 # Autoscaling group - block
 ################################################################################

@@ -22,6 +22,7 @@ variable "launch_type" {
   default     = "EC2"
 }
 
+# tflint-ignore: terraform_unused_declarations
 variable "platform_version" {
   description = "Platform version (applicable for FARGATE launch type)"
   type        = string
@@ -141,6 +142,12 @@ variable "asg_health_check_type" {
   description = "`EC2` or `ELB`. Controls how health checking is done"
   type        = string
   default     = "ELB"
+}
+
+variable "asg_instance_market_options" {
+  description = "The market (purchasing) option for the instance"
+  type        = any
+  default     = null
 }
 
 ################################################################################

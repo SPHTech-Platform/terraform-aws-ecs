@@ -23,6 +23,7 @@ data "aws_subnets" "private" {
   }
 }
 
+# tflint-ignore: terraform_unused_declarations
 data "aws_iam_policy_document" "execution_custom_policy" {
   statement {
     actions   = ["logs:CreateLogGroup"]
