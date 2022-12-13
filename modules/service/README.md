@@ -39,6 +39,7 @@ No modules.
 | <a name="input_ecs_load_balancers"></a> [ecs\_load\_balancers](#input\_ecs\_load\_balancers) | Configuration block for load balancers. | `list(any)` | `[]` | no |
 | <a name="input_efs_volumes"></a> [efs\_volumes](#input\_efs\_volumes) | Task EFS volume definitions as list of configuration objects. You cannot define both Docker volumes and EFS volumes on the same task definition. | `list(any)` | `[]` | no |
 | <a name="input_enable_ecs_managed_tags"></a> [enable\_ecs\_managed\_tags](#input\_enable\_ecs\_managed\_tags) | Specifies whether to enable Amazon ECS managed tags for the tasks within the service | `bool` | `true` | no |
+| <a name="input_enable_execute_command"></a> [enable\_execute\_command](#input\_enable\_execute\_command) | Specifies whether to enable Amazon ECS Exec for the tasks within the service | `bool` | `false` | no |
 | <a name="input_execution_role_arn"></a> [execution\_role\_arn](#input\_execution\_role\_arn) | ECS excution role arn | `string` | `""` | no |
 | <a name="input_launch_type"></a> [launch\_type](#input\_launch\_type) | Launch type | `string` | `"EC2"` | no |
 | <a name="input_name"></a> [name](#input\_name) | The Service name | `string` | n/a | yes |

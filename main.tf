@@ -65,6 +65,8 @@ module "service" {
 
   docker_volumes   = lookup(each.value, "docker_volumes", [])
   assign_public_ip = var.assign_public_ip
+
+  enable_execute_command = var.enable_execute_command
 }
 
 module "service_cpu_autoscaling_policy" {

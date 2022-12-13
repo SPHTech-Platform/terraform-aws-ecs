@@ -85,6 +85,7 @@ resource "aws_ecs_service" "this" {
   platform_version        = var.launch_type == "FARGATE" ? var.platform_version : null
   desired_count           = var.desired_count
   enable_ecs_managed_tags = var.enable_ecs_managed_tags
+  enable_execute_command  = var.enable_execute_command
   propagate_tags          = var.propagate_tags
 
   deployment_maximum_percent         = var.deployment_maximum_percent
