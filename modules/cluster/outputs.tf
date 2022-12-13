@@ -12,3 +12,8 @@ output "ecs_cluster_name" {
   description = "The name of the ECS cluster"
   value       = try(aws_ecs_cluster.this.name, "")
 }
+
+output "ecs_cluster_kms_arn" {
+  description = "The AWS Key Management Service key ID to encrypt the data between the local client and the container"
+  value       = try(aws_kms_key.cluster.arn, "")
+}
