@@ -63,7 +63,9 @@ module "service" {
 
   ecs_load_balancers = lookup(each.value, "ecs_load_balancers", [])
 
-  docker_volumes   = lookup(each.value, "docker_volumes", [])
+  docker_volumes = try(each.value.docker_volumes, [])
+  efs_volumes    = try(each.value.efs_volumes, [])
+
   assign_public_ip = var.assign_public_ip
 
   enable_execute_command = var.enable_execute_command
