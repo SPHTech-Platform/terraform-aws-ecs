@@ -11,8 +11,8 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.16 |
-| <a name="provider_local"></a> [local](#provider\_local) | ~> 2.2 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.36.1 |
+| <a name="provider_local"></a> [local](#provider\_local) | 2.2.3 |
 
 ## Modules
 

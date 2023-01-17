@@ -10,7 +10,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.36.1 |
 
 ## Modules
 
@@ -47,7 +47,7 @@ No modules.
 | <a name="input_log_group_name"></a> [log\_group\_name](#input\_log\_group\_name) | Provide name for log group | `string` | `""` | no |
 | <a name="input_log_retention"></a> [log\_retention](#input\_log\_retention) | Specify log retention in days | `number` | `30` | no |
 | <a name="input_managed_scaling"></a> [managed\_scaling](#input\_managed\_scaling) | Specifies whether to enable managed scaling | `bool` | `true` | no |
-| <a name="input_name"></a> [name](#input\_name) | Name of the product/project/application | `string` | `null` | no |
+| <a name="input_name"></a> [name](#input\_name) | Name of the product/project/application | `string` | `""` | no |
 | <a name="input_scaling_max_step_size"></a> [scaling\_max\_step\_size](#input\_scaling\_max\_step\_size) | Sets managed scaling max step size | `number` | `10` | no |
 | <a name="input_scaling_min_step_size"></a> [scaling\_min\_step\_size](#input\_scaling\_min\_step\_size) | Sets managed scaling min step size | `number` | `1` | no |
 | <a name="input_scaling_target_capacity"></a> [scaling\_target\_capacity](#input\_scaling\_target\_capacity) | Sets managed scaling target capacity | `number` | `80` | no |

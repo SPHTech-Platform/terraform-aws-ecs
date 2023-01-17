@@ -54,7 +54,7 @@ No resources.
 | <a name="input_enable_execute_command"></a> [enable\_execute\_command](#input\_enable\_execute\_command) | Specifies whether to enable Amazon ECS Exec for the tasks within the service | `bool` | `false` | no |
 | <a name="input_launch_type"></a> [launch\_type](#input\_launch\_type) | The launch type on which to run your task.(EC2\|FARGATE) | `string` | `"EC2"` | no |
 | <a name="input_link_ecs_to_asg_capacity_provider"></a> [link\_ecs\_to\_asg\_capacity\_provider](#input\_link\_ecs\_to\_asg\_capacity\_provider) | Specify whether to link ECS to autoscaling group capacity provider | `bool` | `false` | no |
-| <a name="input_name"></a> [name](#input\_name) | Name of the product/project/application | `string` | `null` | no |
+| <a name="input_name"></a> [name](#input\_name) | Name of the product/project/application | `string` | `""` | no |
 | <a name="input_platform_version"></a> [platform\_version](#input\_platform\_version) | Platform version (applicable for FARGATE launch type) | `string` | `"LATEST"` | no |
 | <a name="input_service_deployment_maximum_percent"></a> [service\_deployment\_maximum\_percent](#input\_service\_deployment\_maximum\_percent) | Upper limit (as a percentage of the service's desiredCount) of the number of running tasks that can be running in a service during a deployment. Not valid when using the DAEMON scheduling strategy. | `number` | `200` | no |
 | <a name="input_service_deployment_minimum_healthy_percent"></a> [service\_deployment\_minimum\_healthy\_percent](#input\_service\_deployment\_minimum\_healthy\_percent) | Lower limit (as a percentage of the service's desiredCount) of the number of running tasks that must remain running and healthy in a service during a deployment. | `number` | `100` | no |
