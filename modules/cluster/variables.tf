@@ -1,7 +1,7 @@
 variable "name" {
   description = "Name of the product/project/application"
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "ecs_cluster_name" {

@@ -12,7 +12,7 @@ resource "aws_service_discovery_service" "this" {
   name = each.value
 
   dns_config {
-    namespace_id = element(aws_service_discovery_private_dns_namespace.this.*.id, 0)
+    namespace_id = element(aws_service_discovery_private_dns_namespace.this[*].id, 0)
 
     dns_records {
       ttl  = var.service_discovery_record_ttl
