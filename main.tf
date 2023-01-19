@@ -58,8 +58,8 @@ module "service" {
   subnets               = var.service_subnets
   security_groups       = var.service_security_groups
 
-  deployment_maximum_percent         = var.service_deployment_maximum_percent
-  deployment_minimum_healthy_percent = var.service_deployment_minimum_healthy_percent
+  deployment_maximum_percent         = lookup(each.value, "deployment_maximum_percent", var.service_deployment_maximum_percent)
+  deployment_minimum_healthy_percent = lookup(each.value, "deployment_minimum_healthy_percent", var.service_deployment_minimum_healthy_percent)
 
   ecs_load_balancers = lookup(each.value, "ecs_load_balancers", [])
 
