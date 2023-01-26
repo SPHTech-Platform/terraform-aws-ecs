@@ -63,6 +63,8 @@ module "asg" {
 
   instance_market_options = var.instance_market_options
 
+  metadata_options = var.metadata_options
+
   placement = var.placement
   tags      = var.tags
 }
