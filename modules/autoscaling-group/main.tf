@@ -63,12 +63,7 @@ module "asg" {
 
   instance_market_options = var.instance_market_options
 
-  metadata_options = {
-    http_endpoint               = "enabled"
-    http_tokens                 = "required"
-    http_put_response_hop_limit = 1
-    instance_metadata_tags      = "disabled"
-  }
+  metadata_options = var.metadata_options
 
   placement = var.placement
   tags      = var.tags

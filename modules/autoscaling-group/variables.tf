@@ -142,6 +142,22 @@ variable "instance_market_options" {
   default     = null
 }
 
+variable "metadata_options" {
+  description = "Customize the metadata options (IMDS) for the instance"
+  type = object({
+    http_endpoint               = string
+    http_tokens                 = string
+    http_put_response_hop_limit = number
+    instance_metadata_tags      = string
+  })
+  default = {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 1
+    instance_metadata_tags      = "disabled"
+  }
+}
+
 ################################################################################
 # Autoscaling group - block
 ################################################################################
