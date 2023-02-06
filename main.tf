@@ -46,7 +46,7 @@ module "service" {
 
   source = "./modules/service"
 
-  name                  = replace(each.key, "_", "-")
+  name                  = each.key
   cluster_id            = module.cluster.ecs_cluster_id
   container_definitions = each.value.service_container_definitions
   launch_type           = var.launch_type
