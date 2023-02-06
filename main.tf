@@ -46,7 +46,7 @@ module "service" {
 
   source = "./modules/service"
 
-  name                  = each.key
+  name                  = replace(each.key, "_", "-")
   cluster_id            = module.cluster.ecs_cluster_id
   container_definitions = each.value.service_container_definitions
   launch_type           = var.launch_type
@@ -78,9 +78,9 @@ module "service_cpu_autoscaling_policy" {
 
   name                             = format("%s-%s", var.name, replace(each.key, "_", "-"))
   enable_ecs_cpu_based_autoscaling = true
-  min_capacity                     = each.value.service_min_capacity
-  max_capacity                     = each.value.service_max_capacity
-  target_cpu_value                 = each.value.service_target_cpu_value
+  min_capacity                     = lookup(each.value,"service_min_capacity")
+  max_capacity                     = lookup(each.value,"service_max_capacity")
+  target_cpu_value                 = lookup(each.value,"service_target_cpu_value")
   ecs_cluster_name                 = module.cluster.ecs_cluster_name
   ecs_service_name                 = module.service[each.key].ecs_service_name
 }
