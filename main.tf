@@ -81,6 +81,8 @@ module "service_cpu_autoscaling_policy" {
   min_capacity                     = lookup(each.value, "service_min_capacity", var.service_min_capacity)
   max_capacity                     = lookup(each.value, "service_max_capacity", var.service_max_capacity)
   target_cpu_value                 = lookup(each.value, "service_target_cpu_value", var.service_target_cpu_value)
+  scale_in_cooldown                = lookup(each.value, "service_scale_in_cooldown", var.service_scale_in_cooldown)
+  scale_out_cooldown               = lookup(each.value, "service_scale_out_cooldown", var.service_scale_out_cooldown)
   ecs_cluster_name                 = module.cluster.ecs_cluster_name
   ecs_service_name                 = module.service[each.key].ecs_service_name
 }

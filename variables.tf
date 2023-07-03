@@ -255,3 +255,15 @@ variable "service_target_cpu_value" {
   type        = number
   default     = 70
 }
+
+variable "service_scale_in_cooldown" {
+  description = "Time between scale in action"
+  type        = number
+  default     = 300
+}
+
+variable "service_scale_out_cooldown" {
+  description = "Time between scale out action"
+  type        = number
+  default     = 300
+}
