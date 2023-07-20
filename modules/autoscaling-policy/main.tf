@@ -99,7 +99,7 @@ resource "aws_autoscaling_policy" "asg_memory_autoscaling" {
 }
 
 resource "aws_appautoscaling_scheduled_action" "this" {
-  for_each = { for k, v in var.autoscaling_scheduled_actions : k => v if lookup(v, "create", true) }
+  for_each = { for k, v in var.autoscaling_scheduled_actions : k => v if v.create }
 
   name               = "${var.name}-scheduler"
   service_namespace  = aws_appautoscaling_target.ecs_target[0].service_namespace
