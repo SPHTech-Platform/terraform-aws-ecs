@@ -130,6 +130,6 @@ variable "autoscaling_scheduled_actions" {
     schedule     = string
     start_time   = string
     end_time     = string
-    timezone     = "Asia/Singapore"
+    timezone     = string
   }))
 }
