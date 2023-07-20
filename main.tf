@@ -85,5 +85,5 @@ module "service_cpu_autoscaling_policy" {
   scale_out_cooldown               = lookup(each.value, "service_scale_out_cooldown", var.service_scale_out_cooldown)
   ecs_cluster_name                 = module.cluster.ecs_cluster_name
   ecs_service_name                 = module.service[each.key].ecs_service_name
-  autoscaling_scheduled_actions    = lookup(each.value, "service_autoscaling_scheduled_actions", var.service_autoscaling_scheduled_actions)
+  autoscaling_scheduled_actions    = var.service_autoscaling_scheduled_actions
 }
