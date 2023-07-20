@@ -124,13 +124,12 @@ variable "memory_statistics" {
 
 variable "autoscaling_scheduled_actions" {
   type = map(object({
-    create           = bool
-    desired_capacity = number
-    min_size         = number
-    max_size         = number
-    recurrence       = string
-    start_time       = string
-    end_time         = string
-    suspend_actions  = list(string)
+    create       = bool
+    min_capacity = number
+    max_capacity = number
+    schedule     = string
+    start_time   = string
+    end_time     = string
+    timezone     = string
   }))
 }
