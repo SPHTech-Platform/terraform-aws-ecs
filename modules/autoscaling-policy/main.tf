@@ -97,3 +97,22 @@ resource "aws_autoscaling_policy" "asg_memory_autoscaling" {
     }
   }
 }
+
+resource "aws_appautoscaling_scheduled_action" "this" {
+  for_each = { for k, v in var.autoscaling_scheduled_actions : k => v if lookup(v, "create", true) }
+
+  name               = "${var.name}-scheduler"
+  service_namespace  = aws_appautoscaling_target.ecs_target[0].service_namespace
+  resource_id        = aws_appautoscaling_target.ecs_target[0].resource_id
+  scalable_dimension = aws_appautoscaling_target.ecs_target[0].scalable_dimension
+
+  scalable_target_action {
+    min_capacity = each.value.min_capacity
+    max_capacity = each.value.max_capacity
+  }
+
+  schedule   = each.value.schedule
+  start_time = try(each.value.start_time, null)
+  end_time   = try(each.value.end_time, null)
+  timezone   = try(each.value.timezone, null)
+}

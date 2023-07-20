@@ -267,3 +267,16 @@ variable "service_scale_out_cooldown" {
   type        = number
   default     = 300
 }
+
+variable "service_autoscaling_scheduled_actions" {
+  type = map(object({
+    create           = bool
+    desired_capacity = number
+    min_size         = number
+    max_size         = number
+    recurrence       = string
+    start_time       = string
+    end_time         = string
+    suspend_actions  = list(string)
+  }))
+}
