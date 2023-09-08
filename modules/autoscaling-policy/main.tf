@@ -101,7 +101,7 @@ resource "aws_autoscaling_policy" "asg_memory_autoscaling" {
 resource "aws_appautoscaling_scheduled_action" "this" {
   for_each = { for k, v in var.autoscaling_scheduled_actions : k => v if v.create }
 
-  name               = var.schedule_names[each.key]
+  name               = "${var.name}-${each.key}"
   service_namespace  = aws_appautoscaling_target.ecs_target[0].service_namespace
   resource_id        = aws_appautoscaling_target.ecs_target[0].resource_id
   scalable_dimension = aws_appautoscaling_target.ecs_target[0].scalable_dimension
