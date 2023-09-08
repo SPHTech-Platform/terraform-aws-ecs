@@ -280,3 +280,9 @@ variable "service_autoscaling_scheduled_actions" {
     timezone     = string
   }))
 }
+
+variable "schedule_names" {
+  description = "Names of the schedules"
+  type        = list(string)
+  default     = []
+}
