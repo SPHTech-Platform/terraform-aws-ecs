@@ -280,3 +280,10 @@ variable "service_autoscaling_scheduled_actions" {
     timezone     = string
   }))
 }
+
+
+variable "service_autoscaling_step_size" {
+  description = "How many containers to spin up each time need autoscale"
+  type        = number
+  default     = 1
+}
