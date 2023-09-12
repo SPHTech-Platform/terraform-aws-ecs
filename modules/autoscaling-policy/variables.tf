@@ -118,6 +118,12 @@ variable "memory_statistics" {
   default     = "Average"
 }
 
+variable "autoscaling_step_size" {
+  description = "How many containers to spin up each time need autoscale"
+  type        = number
+  default     = 1
+}
+
 ################################################################################
 # Autoscaling scheduler
 ################################################################################
