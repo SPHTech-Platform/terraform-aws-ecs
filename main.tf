@@ -57,6 +57,7 @@ module "service" {
   task_role_arn         = lookup(each.value, "task_role_arn", var.service_task_role_arn)
   subnets               = var.service_subnets
   security_groups       = var.service_security_groups
+  ignore_taskdef        = var.ignore_taskdef
 
   deployment_maximum_percent         = lookup(each.value, "deployment_maximum_percent", var.service_deployment_maximum_percent)
   deployment_minimum_healthy_percent = lookup(each.value, "deployment_minimum_healthy_percent", var.service_deployment_minimum_healthy_percent)

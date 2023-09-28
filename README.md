@@ -52,6 +52,7 @@ No resources.
 | <a name="input_assign_public_ip"></a> [assign\_public\_ip](#input\_assign\_public\_ip) | Enable a public IP address for the container | `bool` | `false` | no |
 | <a name="input_create_launch_template"></a> [create\_launch\_template](#input\_create\_launch\_template) | Create a launch template | `bool` | `true` | no |
 | <a name="input_enable_execute_command"></a> [enable\_execute\_command](#input\_enable\_execute\_command) | Specifies whether to enable Amazon ECS Exec for the tasks within the service | `bool` | `false` | no |
+| <a name="input_ignore_taskdef"></a> [ignore\_taskdef](#input\_ignore\_taskdef) | Whether changes to task\_def should update the service | `bool` | `false` | no |
 | <a name="input_launch_type"></a> [launch\_type](#input\_launch\_type) | The launch type on which to run your task.(EC2\|FARGATE) | `string` | `"EC2"` | no |
 | <a name="input_link_ecs_to_asg_capacity_provider"></a> [link\_ecs\_to\_asg\_capacity\_provider](#input\_link\_ecs\_to\_asg\_capacity\_provider) | Specify whether to link ECS to autoscaling group capacity provider | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the product/project/application | `string` | `""` | no |
@@ -61,6 +62,8 @@ No resources.
 | <a name="input_service_map"></a> [service\_map](#input\_service\_map) | A map of services to deploy | `map(any)` | `{}` | no |
 | <a name="input_service_max_capacity"></a> [service\_max\_capacity](#input\_service\_max\_capacity) | Maximum capacity of ECS autoscaling target, cannot be less than min\_capacity | `number` | `4` | no |
 | <a name="input_service_min_capacity"></a> [service\_min\_capacity](#input\_service\_min\_capacity) | Minimum capacity of ECS autoscaling target, cannot be more than max\_capacity | `number` | `1` | no |
+| <a name="input_service_scale_in_cooldown"></a> [service\_scale\_in\_cooldown](#input\_service\_scale\_in\_cooldown) | Time between scale in action | `number` | `300` | no |
+| <a name="input_service_scale_out_cooldown"></a> [service\_scale\_out\_cooldown](#input\_service\_scale\_out\_cooldown) | Time between scale out action | `number` | `300` | no |
 | <a name="input_service_security_groups"></a> [service\_security\_groups](#input\_service\_security\_groups) | Security group IDs to attach to your ECS Service | `list(string)` | `[]` | no |
 | <a name="input_service_subnets"></a> [service\_subnets](#input\_service\_subnets) | Private subnets for ECS | `list(string)` | `[]` | no |
 | <a name="input_service_target_cpu_value"></a> [service\_target\_cpu\_value](#input\_service\_target\_cpu\_value) | Autoscale when CPU Usage value over the specified value. Must be specified if `enable_cpu_based_autoscaling` is `true`. | `number` | `70` | no |
@@ -71,5 +74,11 @@ No resources.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_aws_ecs_task_definition"></a> [aws\_ecs\_task\_definition](#output\_aws\_ecs\_task\_definition) | ARN of the ECS service |
+| <a name="output_ecs_cluster_arn"></a> [ecs\_cluster\_arn](#output\_ecs\_cluster\_arn) | ARN of the ECS Cluster |
+| <a name="output_ecs_cluster_id"></a> [ecs\_cluster\_id](#output\_ecs\_cluster\_id) | ID of the ECS Cluster |
 | <a name="output_ecs_cluster_kms_arn"></a> [ecs\_cluster\_kms\_arn](#output\_ecs\_cluster\_kms\_arn) | The AWS Key Management Service key ID to encrypt the data between the local client and the container |
+| <a name="output_ecs_cluster_name"></a> [ecs\_cluster\_name](#output\_ecs\_cluster\_name) | The name of the ECS cluster |
+| <a name="output_ecs_service_arn"></a> [ecs\_service\_arn](#output\_ecs\_service\_arn) | ARN of the ECS service |
+| <a name="output_ecs_service_name"></a> [ecs\_service\_name](#output\_ecs\_service\_name) | The name of the ECS service |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

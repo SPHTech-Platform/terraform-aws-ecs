@@ -40,6 +40,7 @@ No resources.
 | <a name="input_launch_template_description"></a> [launch\_template\_description](#input\_launch\_template\_description) | Description of the launch template | `string` | `null` | no |
 | <a name="input_launch_type"></a> [launch\_type](#input\_launch\_type) | Launch type | `string` | `"EC2"` | no |
 | <a name="input_max_size"></a> [max\_size](#input\_max\_size) | The maximum size of the autoscaling group | `number` | `null` | no |
+| <a name="input_metadata_options"></a> [metadata\_options](#input\_metadata\_options) | Customize the metadata options (IMDS) for the instance | <pre>object({<br>    http_endpoint               = string<br>    http_tokens                 = string<br>    http_put_response_hop_limit = number<br>    instance_metadata_tags      = string<br>  })</pre> | <pre>{<br>  "http_endpoint": "enabled",<br>  "http_put_response_hop_limit": 1,<br>  "http_tokens": "required",<br>  "instance_metadata_tags": "disabled"<br>}</pre> | no |
 | <a name="input_min_size"></a> [min\_size](#input\_min\_size) | The minimum size of the autoscaling group | `number` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the product/project/application | `string` | `""` | no |
 | <a name="input_network_interface_security_groups"></a> [network\_interface\_security\_groups](#input\_network\_interface\_security\_groups) | A list of security group IDs to associate | `list(string)` | `null` | no |

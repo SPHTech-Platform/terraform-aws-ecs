@@ -82,6 +82,12 @@ variable "enable_execute_command" {
   default     = false
 }
 
+variable "ignore_taskdef" {
+  description = "Whether changes to task_def should update the service"
+  type        = bool
+  default     = false
+}
+
 ################################################################################
 # Autoscaling group
 ################################################################################
