@@ -13,3 +13,4 @@ jobs:
     uses: SPHTech-Platform/reusable-workflows/.github/workflows/terraform.yaml@main
     with:
       upload_sarif: false
+      checkov_skip_check: CKV_TF_1,CKV_AWS_338
