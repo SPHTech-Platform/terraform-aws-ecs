@@ -20,6 +20,8 @@ resource "aws_kms_key" "cloudwatch" {
 
 
 resource "aws_kms_key" "cluster" {
+  #checkov:skip=CKV2_AWS_64:Accept risk of no KMS key policy
+
   description             = "Key for data between the local client and the container"
   enable_key_rotation     = true
   deletion_window_in_days = 7

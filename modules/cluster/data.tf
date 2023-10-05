@@ -3,6 +3,8 @@ data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
 data "aws_iam_policy_document" "cloudwatch_logs_allow_kms" {
+  #checkov:skip=CKV_AWS_356: Accept risk of using wildcard resource
+
   statement {
     sid    = "Enable IAM User Permissions"
     effect = "Allow"
