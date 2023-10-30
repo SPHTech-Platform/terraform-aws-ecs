@@ -32,3 +32,13 @@ output "aws_ecs_task_definition" {
   description = "ARN of the ECS service"
   value       = try(module.cluster.aws_ecs_task_definition, "")
 }
+
+output "ecs_cloudwatch_log_group_name" {
+  description = "The cloudwatch log group to be used by the cluster"
+  value       = try(module.cluster.ecs_cloudwatch_log_group_name, "")
+}
+
+output "ecs_cloudwatch_log_group_arn" {
+  description = "The cloudwatch log group to be used by the cluster"
+  value       = try(module.cluster.ecs_cloudwatch_log_group_arn, "")
+}
