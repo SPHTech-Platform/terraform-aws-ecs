@@ -23,4 +23,7 @@ output "ecs_cloudwatch_log_group_name" {
   value       = try(aws_cloudwatch_log_group.this.*.name, "")
 }
 
-
+output "ecs_cloudwatch_log_group_arn" {
+  description = "The cloudwatch log group to be used by the cluster"
+  value       = try(aws_cloudwatch_log_group.this.*.arn, "")
+}
