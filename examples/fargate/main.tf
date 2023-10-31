@@ -31,6 +31,6 @@ module "ecs_task_role" {
     "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess",
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   ]
-  policy                = data.aws_iam_policy_document.task_ecs_exec_policy.json
-  policy_name           = "ecs-task-policy-${var.name}"
+  policy      = data.aws_iam_policy_document.task_ecs_exec_policy.json
+  policy_name = "ecs-task-policy-${var.name}"
 }
