@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "task_ecs_exec_policy" {
     ]
 
     resources = [
-      module.ecs_cluster.ecs_cluster_kms_arn
+      module.fargate_cluster.ecs_cluster_kms_arn
     ]
   }
   statement {
