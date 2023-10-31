@@ -31,17 +31,24 @@ data "aws_iam_policy_document" "execution_custom_policy" {
   }
 }
 
-data "aws_iam_policy_document" "task_custom_policy" {
+data "aws_iam_policy_document" "task_ecs_exec_policy" {
   statement {
-    sid = "CustomTaskPolicy"
-
     actions = [
-      "s3:Get*",
-      "s3:List*",
+      "kms:Decrypt",
+      "kms:GenerateDataKey",
     ]
 
     resources = [
-      "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/*",
+      module.ecs_cluster.ecs_cluster_kms_arn
     ]
+  }
+  statement {
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
+    ]
+    resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:*"]
   }
 }
