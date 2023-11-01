@@ -57,6 +57,6 @@ data "aws_iam_policy_document" "task_ecs_exec_policy" {
       "ssmmessages:OpenControlChannel",
       "ssmmessages:OpenDataChannel",
     ]
-    resources = "*"
+    resources = ["*"]
   }
 }
