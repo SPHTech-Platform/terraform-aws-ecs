@@ -35,7 +35,6 @@ data "aws_iam_policy_document" "task_ecs_exec_policy" {
   statement {
     actions = [
       "kms:Decrypt",
-      "kms:GenerateDataKey",
     ]
 
     resources = [
@@ -50,5 +49,14 @@ data "aws_iam_policy_document" "task_ecs_exec_policy" {
       "logs:DescribeLogStreams",
     ]
     resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:*"]
+  }
+  statement {
+    actions = [
+      "ssmmessages:CreateControlChannel",
+      "ssmmessages:CreateDataChannel",
+      "ssmmessages:OpenControlChannel",
+      "ssmmessages:OpenDataChannel",
+    ]
+    resources = "*"
   }
 }

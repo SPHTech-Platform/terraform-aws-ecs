@@ -29,7 +29,6 @@ module "ecs_task_role" {
   trusted_role_services = ["ecs-tasks.amazonaws.com"]
   custom_role_policy_arns = [
     "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess",
-    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
   ]
   policy      = data.aws_iam_policy_document.task_ecs_exec_policy.json
   policy_name = "ecs-task-policy-${var.name}"
