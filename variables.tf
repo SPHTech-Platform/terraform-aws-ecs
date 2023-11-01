@@ -38,6 +38,7 @@ variable "service_map" {
 variable "service_task_execution_role_arn" {
   description = "Default IAM role for ECS execution"
   type        = string
+  default     = ""
 }
 
 variable "service_task_role_arn" {
