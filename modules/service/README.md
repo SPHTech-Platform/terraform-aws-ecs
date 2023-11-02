@@ -61,6 +61,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_aws_ecs_task_definition"></a> [aws\_ecs\_task\_definition](#output\_aws\_ecs\_task\_definition) | ARN of the ECS service |
 | <a name="output_ecs_service_arn"></a> [ecs\_service\_arn](#output\_ecs\_service\_arn) | ARN of the ECS service |
 | <a name="output_ecs_service_name"></a> [ecs\_service\_name](#output\_ecs\_service\_name) | The name of the ECS service |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
