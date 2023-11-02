@@ -61,17 +61,27 @@ No resources.
 | <a name="input_service_map"></a> [service\_map](#input\_service\_map) | A map of services to deploy | `map(any)` | `{}` | no |
 | <a name="input_service_max_capacity"></a> [service\_max\_capacity](#input\_service\_max\_capacity) | Maximum capacity of ECS autoscaling target, cannot be less than min\_capacity | `number` | `4` | no |
 | <a name="input_service_min_capacity"></a> [service\_min\_capacity](#input\_service\_min\_capacity) | Minimum capacity of ECS autoscaling target, cannot be more than max\_capacity | `number` | `1` | no |
+| <a name="input_service_scale_in_cooldown"></a> [service\_scale\_in\_cooldown](#input\_service\_scale\_in\_cooldown) | Time between scale in action | `number` | `300` | no |
+| <a name="input_service_scale_out_cooldown"></a> [service\_scale\_out\_cooldown](#input\_service\_scale\_out\_cooldown) | Time between scale out action | `number` | `300` | no |
 | <a name="input_service_security_groups"></a> [service\_security\_groups](#input\_service\_security\_groups) | Security group IDs to attach to your ECS Service | `list(string)` | `[]` | no |
 | <a name="input_service_subnets"></a> [service\_subnets](#input\_service\_subnets) | Private subnets for ECS | `list(string)` | `[]` | no |
 | <a name="input_service_target_cpu_value"></a> [service\_target\_cpu\_value](#input\_service\_target\_cpu\_value) | Autoscale when CPU Usage value over the specified value. Must be specified if `enable_cpu_based_autoscaling` is `true`. | `number` | `70` | no |
-| <a name="input_service_task_execution_role_arn"></a> [service\_task\_execution\_role\_arn](#input\_service\_task\_execution\_role\_arn) | Default IAM role for ECS execution | `string` | n/a | yes |
+| <a name="input_service_task_execution_role_arn"></a> [service\_task\_execution\_role\_arn](#input\_service\_task\_execution\_role\_arn) | Default IAM role for ECS execution | `string` | `""` | no |
 | <a name="input_service_task_role_arn"></a> [service\_task\_role\_arn](#input\_service\_task\_role\_arn) | Default IAM role for ECS task | `string` | `""` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
+| <a name="output_aws_ecs_task_definition"></a> [aws\_ecs\_task\_definition](#output\_aws\_ecs\_task\_definition) | ARN of the ECS service |
+| <a name="output_ecs_cloudwatch_log_group_arn"></a> [ecs\_cloudwatch\_log\_group\_arn](#output\_ecs\_cloudwatch\_log\_group\_arn) | The cloudwatch log group to be used by the cluster |
+| <a name="output_ecs_cloudwatch_log_group_name"></a> [ecs\_cloudwatch\_log\_group\_name](#output\_ecs\_cloudwatch\_log\_group\_name) | The cloudwatch log group to be used by the cluster |
+| <a name="output_ecs_cluster_arn"></a> [ecs\_cluster\_arn](#output\_ecs\_cluster\_arn) | ARN of the ECS Cluster |
+| <a name="output_ecs_cluster_id"></a> [ecs\_cluster\_id](#output\_ecs\_cluster\_id) | ID of the ECS Cluster |
 | <a name="output_ecs_cluster_kms_arn"></a> [ecs\_cluster\_kms\_arn](#output\_ecs\_cluster\_kms\_arn) | The AWS Key Management Service key ID to encrypt the data between the local client and the container |
+| <a name="output_ecs_cluster_name"></a> [ecs\_cluster\_name](#output\_ecs\_cluster\_name) | The name of the ECS cluster |
+| <a name="output_ecs_service_arn"></a> [ecs\_service\_arn](#output\_ecs\_service\_arn) | ARN of the ECS service |
+| <a name="output_ecs_service_name"></a> [ecs\_service\_name](#output\_ecs\_service\_name) | The name of the ECS service |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 <!-- BEGIN_TF_DOCS -->

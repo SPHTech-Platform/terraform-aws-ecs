@@ -58,6 +58,8 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_ecs_cloudwatch_log_group_arn"></a> [ecs\_cloudwatch\_log\_group\_arn](#output\_ecs\_cloudwatch\_log\_group\_arn) | The cloudwatch log group to be used by the cluster |
+| <a name="output_ecs_cloudwatch_log_group_name"></a> [ecs\_cloudwatch\_log\_group\_name](#output\_ecs\_cloudwatch\_log\_group\_name) | The cloudwatch log group to be used by the cluster |
 | <a name="output_ecs_cluster_arn"></a> [ecs\_cluster\_arn](#output\_ecs\_cluster\_arn) | ARN of the ECS Cluster |
 | <a name="output_ecs_cluster_id"></a> [ecs\_cluster\_id](#output\_ecs\_cluster\_id) | ID of the ECS Cluster |
 | <a name="output_ecs_cluster_kms_arn"></a> [ecs\_cluster\_kms\_arn](#output\_ecs\_cluster\_kms\_arn) | The AWS Key Management Service key ID to encrypt the data between the local client and the container |
