@@ -20,17 +20,23 @@ output "ecs_cluster_name" {
 
 output "ecs_service_arn" {
   description = "ARN of the ECS service"
-  value       = try(module.cluster.ecs_service_arn, "")
+  value = try(tomap({
+    for k, f in module.service : k => f.ecs_service_arn
+  }), "")
 }
 
 output "ecs_service_name" {
   description = "The name of the ECS service"
-  value       = try(module.cluster.ecs_service_name, "")
+  value = try(tomap({
+    for k, f in module.service : k => f.ecs_service_name
+  }), "")
 }
 
 output "aws_ecs_task_definition" {
   description = "ARN of the ECS service"
-  value       = try(module.cluster.aws_ecs_task_definition, "")
+  value = try(tomap({
+    for k, f in module.service : k => f.aws_ecs_task_definition
+  }), "")
 }
 
 output "ecs_cloudwatch_log_group_name" {
