@@ -1,5 +1,5 @@
 resource "aws_appautoscaling_target" "ecs_target" {
-  count = var.enable_ecs_cpu_based_autoscaling || var.enable_ecs_memory_based_autoscaling ? 1 : 0
+  count = var.enable_ecs_cpu_based_autoscaling || var.enable_ecs_memory_based_autoscaling ? var.autoscaling_step_size : 0
 
   min_capacity       = var.min_capacity
   max_capacity       = var.max_capacity
@@ -9,7 +9,7 @@ resource "aws_appautoscaling_target" "ecs_target" {
 }
 
 resource "aws_appautoscaling_policy" "ecs_service_cpu_policy" {
-  count = var.enable_ecs_cpu_based_autoscaling ? 1 : 0
+  count = var.enable_ecs_cpu_based_autoscaling ? var.autoscaling_step_size : 0
 
   name               = "${var.name}-service-cpu"
   resource_id        = aws_appautoscaling_target.ecs_target[0].resource_id
@@ -30,7 +30,7 @@ resource "aws_appautoscaling_policy" "ecs_service_cpu_policy" {
 }
 
 resource "aws_appautoscaling_policy" "ecs_service_memory_policy" {
-  count = var.enable_ecs_memory_based_autoscaling ? 1 : 0
+  count = var.enable_ecs_memory_based_autoscaling ? var.autoscaling_step_size : 0
 
   name               = "${var.name}-service-memory"
   resource_id        = aws_appautoscaling_target.ecs_target[0].resource_id
@@ -51,7 +51,7 @@ resource "aws_appautoscaling_policy" "ecs_service_memory_policy" {
 }
 
 resource "aws_autoscaling_policy" "asg_cpu_autoscaling" {
-  count = var.enable_asg_cpu_based_autoscaling ? 1 : 0
+  count = var.enable_asg_cpu_based_autoscaling ? var.autoscaling_step_size : 0
 
   name                   = "${var.name}-asg-cpu"
   policy_type            = "TargetTrackingScaling"
@@ -75,7 +75,7 @@ resource "aws_autoscaling_policy" "asg_cpu_autoscaling" {
 }
 
 resource "aws_autoscaling_policy" "asg_memory_autoscaling" {
-  count = var.enable_asg_memory_based_autoscaling ? 1 : 0
+  count = var.enable_asg_memory_based_autoscaling ? var.autoscaling_step_size : 0
 
   name                   = "${var.name}-asg-memory"
   policy_type            = "TargetTrackingScaling"
@@ -96,4 +96,23 @@ resource "aws_autoscaling_policy" "asg_memory_autoscaling" {
       }
     }
   }
+}
+
+resource "aws_appautoscaling_scheduled_action" "this" {
+  for_each = { for k, v in var.autoscaling_scheduled_actions : k => v if v.create }
+
+  name               = "${var.name}-${each.key}"
+  service_namespace  = aws_appautoscaling_target.ecs_target[0].service_namespace
+  resource_id        = aws_appautoscaling_target.ecs_target[0].resource_id
+  scalable_dimension = aws_appautoscaling_target.ecs_target[0].scalable_dimension
+
+  scalable_target_action {
+    min_capacity = each.value.min_capacity
+    max_capacity = each.value.max_capacity
+  }
+
+  schedule   = each.value.schedule
+  start_time = try(each.value.start_time, null)
+  end_time   = try(each.value.end_time, null)
+  timezone   = try(each.value.timezone, null)
 }

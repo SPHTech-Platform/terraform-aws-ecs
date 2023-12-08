@@ -268,3 +268,23 @@ variable "service_scale_out_cooldown" {
   type        = number
   default     = 300
 }
+
+
+variable "service_autoscaling_scheduled_actions" {
+  type = map(object({
+    create       = bool
+    min_capacity = number
+    max_capacity = number
+    schedule     = string
+    start_time   = string
+    end_time     = string
+    timezone     = string
+  }))
+}
+
+
+variable "service_autoscaling_step_size" {
+  description = "How many containers to spin up each time need autoscale"
+  type        = number
+  default     = 1
+}

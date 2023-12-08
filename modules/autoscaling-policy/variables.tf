@@ -117,3 +117,25 @@ variable "memory_statistics" {
   type        = string
   default     = "Average"
 }
+
+variable "autoscaling_step_size" {
+  description = "How many containers to spin up each time need autoscale"
+  type        = number
+  default     = 1
+}
+
+################################################################################
+# Autoscaling scheduler
+################################################################################
+
+variable "autoscaling_scheduled_actions" {
+  type = map(object({
+    create       = bool
+    min_capacity = number
+    max_capacity = number
+    schedule     = string
+    start_time   = string
+    end_time     = string
+    timezone     = string
+  }))
+}
