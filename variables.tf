@@ -268,3 +268,12 @@ variable "service_scale_out_cooldown" {
   type        = number
   default     = 300
 }
+
+variable "task_placement_constraints" {
+  description = "The rules that are taken into consideration during task placement. Maximum number of placement_constraints is 10"
+  type = list(object({
+    type       = string
+    expression = string
+  }))
+  default = []
+}
