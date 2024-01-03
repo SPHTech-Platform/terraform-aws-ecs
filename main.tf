@@ -68,7 +68,8 @@ module "service" {
 
   assign_public_ip = var.assign_public_ip
 
-  enable_execute_command = var.enable_execute_command
+  enable_execute_command     = var.enable_execute_command
+  task_placement_constraints = var.task_placement_constraints
 }
 
 module "service_cpu_autoscaling_policy" {
