@@ -100,7 +100,7 @@ resource "aws_ecs_service" "this" {
   }
 
   dynamic "deployment_circuit_breaker" {
-    for_each = length(var.deployment_circuit_breaker) > 0 ? [var.deployment_circuit_breaker] : []
+    for_each = var.deployment_circuit_breaker.enable ? [var.deployment_circuit_breaker] : []
 
     content {
       enable   = deployment_circuit_breaker.value.enable

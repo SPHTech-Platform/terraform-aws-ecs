@@ -60,7 +60,7 @@ module "service" {
 
   deployment_maximum_percent         = lookup(each.value, "deployment_maximum_percent", var.service_deployment_maximum_percent)
   deployment_minimum_healthy_percent = lookup(each.value, "deployment_minimum_healthy_percent", var.service_deployment_minimum_healthy_percent)
-  deployment_circuit_breaker         = lookup(each.value, "deployment_circuit_breaker", {})
+  deployment_circuit_breaker         = lookup(each.value, "deployment_circuit_breaker", { enable = false })
 
   ecs_load_balancers                = lookup(each.value, "ecs_load_balancers", [])
   health_check_grace_period_seconds = lookup(each.value, "health_check_grace_period_seconds", null)
