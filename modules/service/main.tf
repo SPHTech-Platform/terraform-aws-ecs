@@ -90,11 +90,22 @@ resource "aws_ecs_service" "this" {
   enable_execute_command  = var.enable_execute_command
   propagate_tags          = var.propagate_tags
 
+  health_check_grace_period_seconds = var.health_check_grace_period_seconds
+
   deployment_maximum_percent         = var.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
 
   deployment_controller {
     type = var.deployment_controller_type
+  }
+
+  dynamic "deployment_circuit_breaker" {
+    for_each = var.deployment_circuit_breaker.enable ? [var.deployment_circuit_breaker] : []
+
+    content {
+      enable   = deployment_circuit_breaker.value.enable
+      rollback = deployment_circuit_breaker.value.rollback
+    }
   }
 
   dynamic "service_registries" {

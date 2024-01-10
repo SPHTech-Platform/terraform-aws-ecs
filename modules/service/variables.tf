@@ -101,6 +101,12 @@ variable "ecs_load_balancers" {
   default     = []
 }
 
+variable "health_check_grace_period_seconds" {
+  description = "Seconds to ignore failing load balancer health checks on newly instantiated tasks to prevent premature shutdown, up to 2147483647. Only valid for services configured to use load balancers"
+  type        = number
+  default     = null
+}
+
 variable "service_registries" {
   description = "Service discovery registries for the service. The maximum number of service_registries blocks is 1"
   type        = list(any)
@@ -117,6 +123,12 @@ variable "deployment_minimum_healthy_percent" {
   description = "Lower limit (as a percentage of the service's desiredCount) of the number of running tasks that must remain running and healthy in a service during a deployment."
   type        = number
   default     = 100
+}
+
+variable "deployment_circuit_breaker" {
+  description = "Configuration block for deployment circuit breaker"
+  type        = any
+  default     = {}
 }
 
 ################################################################################
