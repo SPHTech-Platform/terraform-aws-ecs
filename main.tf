@@ -39,6 +39,9 @@ module "cluster" {
   name                              = var.name
   link_ecs_to_asg_capacity_provider = var.link_ecs_to_asg_capacity_provider
   asg_arn                           = module.autoscaling_group.autoscaling_group_arn
+
+  default_capacity_provider_strategy = var.default_capacity_provider_strategy
+  capacity_providers                 = var.capacity_providers
 }
 
 module "service" {
