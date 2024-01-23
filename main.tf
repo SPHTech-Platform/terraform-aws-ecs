@@ -75,6 +75,9 @@ module "service" {
 
   enable_execute_command     = var.enable_execute_command
   task_placement_constraints = var.task_placement_constraints
+
+  capacity_provider_strategy = var.default_capacity_provider_strategy
+
 }
 
 module "service_cpu_autoscaling_policy" {
