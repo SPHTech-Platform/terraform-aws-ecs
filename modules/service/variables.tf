@@ -131,6 +131,12 @@ variable "deployment_circuit_breaker" {
   default     = {}
 }
 
+variable "capacity_provider_strategy" {
+  description = "The capacity provider strategy to use by ecs service. Can be one or more."
+  type        = list(map(any))
+  default     = []
+}
+
 ################################################################################
 # ECS Task Definition
 ################################################################################

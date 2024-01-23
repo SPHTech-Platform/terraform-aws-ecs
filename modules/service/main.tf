@@ -159,6 +159,17 @@ resource "aws_ecs_service" "this" {
     }
   }
 
+  dynamic "capacity_provider_strategy" {
+    for_each = var.capacity_provider_strategy != null ? var.capacity_provider_strategy : []
+
+    iterator = strategy
+    content {
+      capacity_provider = strategy.value["capacity_provider"]
+      weight            = lookup(strategy.value, "weight", null)
+      base              = lookup(strategy.value, "base", null)
+    }
+  }
+
   tags = var.tags
 
 }
