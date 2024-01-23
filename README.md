@@ -68,6 +68,8 @@ No resources.
 | <a name="input_service_target_cpu_value"></a> [service\_target\_cpu\_value](#input\_service\_target\_cpu\_value) | Autoscale when CPU Usage value over the specified value. Must be specified if `enable_cpu_based_autoscaling` is `true`. | `number` | `70` | no |
 | <a name="input_service_task_execution_role_arn"></a> [service\_task\_execution\_role\_arn](#input\_service\_task\_execution\_role\_arn) | Default IAM role for ECS execution | `string` | `""` | no |
 | <a name="input_service_task_role_arn"></a> [service\_task\_role\_arn](#input\_service\_task\_role\_arn) | Default IAM role for ECS task | `string` | `""` | no |
+| <a name="capacity_providers"></a> [capacity\_provider](#default\_capacity\_provider\_strategy) | Capacity providers for ECS Cluster | `list(string)` | `[]` | no |
+| <a name="default_capacity_provider_strategy"></a> [default\_capacity\_provider\_strategy](#default\_capacity\_provider\_strategy) | Default capacity provider strategy for ECS Cluster | `list(map(any))` | `[]` | no |
 | <a name="input_task_placement_constraints"></a> [task\_placement\_constraints](#input\_task\_placement\_constraints) | The rules that are taken into consideration during task placement. Maximum number of placement\_constraints is 10 | <pre>list(object({<br>    type       = string<br>    expression = string<br>  }))</pre> | `[]` | no |
 
 ## Outputs
