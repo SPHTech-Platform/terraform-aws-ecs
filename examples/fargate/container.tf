@@ -3,7 +3,7 @@ module "container_httpd" {
   version         = "0.58.1"
   container_name  = "container-httpd"
   container_image = "httpd:latest"
-  essential                    = "true"
+  essential       = "true"
 
   log_configuration = {
     logDriver = "awslogs"
