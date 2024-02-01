@@ -18,7 +18,9 @@ locals {
       ])
       service_task_cpu      = 256
       service_task_memory   = 512
-      service_desired_count = 1
+      service_desired_count = 4
+      service_deployment_maximum_percent = 600
+      service_deployment_minimum_healthy_percent = 100
       ecs_load_balancers = [
         {
           target_group_arn = element(module.alb.target_group_arns, 0),

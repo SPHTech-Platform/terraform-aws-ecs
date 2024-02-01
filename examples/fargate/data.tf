@@ -5,7 +5,7 @@ data "aws_caller_identity" "current" {}
 data "aws_vpc" "default" {
   filter {
     name   = "tag:Name"
-    values = ["*Main*"]
+    values = ["*aft-vpc*"]
   }
 }
 
@@ -27,7 +27,7 @@ data "aws_subnets" "private" {
 data "aws_iam_policy_document" "execution_custom_policy" {
   statement {
     actions   = ["logs:CreateLogGroup"]
-    resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/ecs/ecs-${var.name}/*"]
+    resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:*"]
   }
 }
 
@@ -37,9 +37,7 @@ data "aws_iam_policy_document" "task_ecs_exec_policy" {
       "kms:Decrypt",
     ]
 
-    resources = [
-      module.fargate_cluster.ecs_cluster_kms_arn
-    ]
+    resources = ["*"]
   }
   statement {
     actions = [

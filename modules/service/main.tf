@@ -83,7 +83,7 @@ resource "aws_ecs_service" "this" {
     data.aws_ecs_task_definition.this.revision,
   )}"
 
-  launch_type             = var.launch_type
+  launch_type             = length(var.capacity_provider_strategy) > 0 ? null : var.launch_type
   platform_version        = var.launch_type == "FARGATE" ? var.platform_version : null
   desired_count           = var.desired_count
   enable_ecs_managed_tags = var.enable_ecs_managed_tags
