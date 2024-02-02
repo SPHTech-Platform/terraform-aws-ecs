@@ -37,7 +37,9 @@ data "aws_iam_policy_document" "task_ecs_exec_policy" {
       "kms:Decrypt",
     ]
 
-    resources = [module.fargate_cluster.ecs_cluster_kms_arn]
+    resources = [
+      module.fargate_cluster.ecs_cluster_kms_arn
+    ]
   }
   statement {
     actions = [
