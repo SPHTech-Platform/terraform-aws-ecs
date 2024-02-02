@@ -27,7 +27,7 @@ data "aws_subnets" "private" {
 data "aws_iam_policy_document" "execution_custom_policy" {
   statement {
     actions   = ["logs:CreateLogGroup"]
-    resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:*"]
+    resources = ["arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/ecs/${var.name}/*"]
   }
 }
 
@@ -37,7 +37,7 @@ data "aws_iam_policy_document" "task_ecs_exec_policy" {
       "kms:Decrypt",
     ]
 
-    resources = ["arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key:/*"]
+    resources = [module.fargate_cluster.ecs_cluster_kms_arn]
   }
   statement {
     actions = [
