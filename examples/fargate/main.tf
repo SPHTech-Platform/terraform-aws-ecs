@@ -11,7 +11,7 @@ module "fargate_cluster" {
   service_subnets                 = data.aws_subnets.private.ids
   service_security_groups         = [aws_security_group.ecs_sg.id]
 
-  capacity_providers                 = ["FARGATE", "FARGATE_SPOT"]
+  capacity_providers = ["FARGATE", "FARGATE_SPOT"]
   default_capacity_provider_strategy = [
     { "capacity_provider" : "FARGATE_SPOT", "weight" : 2, "base" : 0 },
     { "capacity_provider" : "FARGATE", "weight" : 1, "base" : 1 }
