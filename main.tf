@@ -42,6 +42,7 @@ module "cluster" {
 
   default_capacity_provider_strategy = var.default_capacity_provider_strategy
   capacity_providers                 = var.capacity_providers
+  tags                               = var.cluster_tags
 }
 
 module "service" {
@@ -77,7 +78,7 @@ module "service" {
   task_placement_constraints = var.task_placement_constraints
 
   capacity_provider_strategy = var.default_capacity_provider_strategy
-
+  tags                       = var.service_tags
 }
 
 module "service_cpu_autoscaling_policy" {
