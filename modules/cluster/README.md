@@ -51,6 +51,7 @@ No modules.
 | <a name="input_scaling_max_step_size"></a> [scaling\_max\_step\_size](#input\_scaling\_max\_step\_size) | Sets managed scaling max step size | `number` | `10` | no |
 | <a name="input_scaling_min_step_size"></a> [scaling\_min\_step\_size](#input\_scaling\_min\_step\_size) | Sets managed scaling min step size | `number` | `1` | no |
 | <a name="input_scaling_target_capacity"></a> [scaling\_target\_capacity](#input\_scaling\_target\_capacity) | Sets managed scaling target capacity | `number` | `80` | no |
+| <a name="input_service_connect_defaults"></a> [service\_connect\_defaults](#input\_service\_connect\_defaults) | Configures a Service Connect Namespace | `map(string)` | `{}` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | AWS tags to be applied to resources | `map(string)` | `{}` | no |
 | <a name="input_termination_protection"></a> [termination\_protection](#input\_termination\_protection) | Enables or disables container-aware termination of instances in the auto scaling group when scale-in happens. | `bool` | `true` | no |
 

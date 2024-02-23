@@ -10,6 +10,12 @@ variable "ecs_cluster_name" {
   default     = null
 }
 
+variable "service_connect_defaults" {
+  description = "Configures a Service Connect Namespace"
+  type        = map(string)
+  default     = {}
+}
+
 ################################################################################
 # Cloudwatch
 ################################################################################

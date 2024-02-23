@@ -79,5 +79,14 @@ resource "aws_ecs_cluster" "this" {
       }
     }
   }
+
+  dynamic "service_connect_defaults" {
+    for_each = length(var.service_connect_defaults) > 0 ? [var.service_connect_defaults] : []
+
+    content {
+      namespace = service_connect_defaults.value.namespace
+    }
+  }
+
   tags = merge(var.tags, { "Name" : var.ecs_cluster_name })
 }

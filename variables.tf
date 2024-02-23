@@ -4,6 +4,12 @@ variable "name" {
   default     = ""
 }
 
+variable "service_connect_defaults" {
+  description = "Configures a Service Connect Namespace"
+  type        = map(string)
+  default     = {}
+}
+
 ##############################
 # ECS
 ##############################

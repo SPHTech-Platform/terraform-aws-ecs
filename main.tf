@@ -42,6 +42,7 @@ module "cluster" {
 
   default_capacity_provider_strategy = var.default_capacity_provider_strategy
   capacity_providers                 = var.capacity_providers
+  service_connect_defaults           = var.service_connect_defaults
   tags                               = var.cluster_tags
 }
 
@@ -78,7 +79,8 @@ module "service" {
   task_placement_constraints = var.task_placement_constraints
 
   capacity_provider_strategy = var.default_capacity_provider_strategy
-  tags                       = var.service_tags
+
+  service_connect_configuration = length(var.service_connect_defaults) > 0 ? try(each.value.service_connect_configuration, {}) : {}
 }
 
 module "service_cpu_autoscaling_policy" {
