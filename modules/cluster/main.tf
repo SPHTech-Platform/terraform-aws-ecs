@@ -62,6 +62,11 @@ resource "aws_ecs_cluster_capacity_providers" "this" {
   }
 }
 
+resource "aws_service_discovery_http_namespace" "this" {
+  count = length(var.service_connect_defaults) > 0 ? 1 : 0
+  name  = format("ecs-%s", var.name)
+}
+
 resource "aws_ecs_cluster" "this" {
   name = format("ecs-%s", var.name)
   setting {
@@ -79,5 +84,14 @@ resource "aws_ecs_cluster" "this" {
       }
     }
   }
+
+  dynamic "service_connect_defaults" {
+    for_each = length(var.service_connect_defaults) > 0 ? [var.service_connect_defaults] : []
+
+    content {
+      namespace = try(service_connect_defaults.value.namespace, aws_service_discovery_http_namespace.this[0].arn)
+    }
+  }
+
   tags = merge(var.tags, { "Name" : var.ecs_cluster_name })
 }

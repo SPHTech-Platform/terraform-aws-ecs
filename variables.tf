@@ -4,6 +4,12 @@ variable "name" {
   default     = ""
 }
 
+variable "service_connect_defaults" {
+  description = "Configures a Service Connect Namespace"
+  type        = map(string)
+  default     = {}
+}
+
 ##############################
 # ECS
 ##############################
@@ -81,6 +87,12 @@ variable "enable_execute_command" {
   description = "Specifies whether to enable Amazon ECS Exec for the tasks within the service"
   type        = bool
   default     = false
+}
+
+variable "service_connect_configuration" {
+  description = "Configures a Service Connect"
+  type        = map(string)
+  default     = {}
 }
 
 ################################################################################

@@ -50,12 +50,16 @@ No resources.
 | <a name="input_asg_volume_size"></a> [asg\_volume\_size](#input\_asg\_volume\_size) | Specify the volume size for the root ebs | `string` | `30` | no |
 | <a name="input_asg_wait_for_capacity_timeout"></a> [asg\_wait\_for\_capacity\_timeout](#input\_asg\_wait\_for\_capacity\_timeout) | A maximum duration that Terraform should wait for ASG instances to be healthy before timing out. (See also Waiting for Capacity below.) Setting this to '0' causes Terraform to skip all Capacity Waiting behavior. | `string` | `null` | no |
 | <a name="input_assign_public_ip"></a> [assign\_public\_ip](#input\_assign\_public\_ip) | Enable a public IP address for the container | `bool` | `false` | no |
+| <a name="input_capacity_providers"></a> [capacity\_providers](#input\_capacity\_providers) | List of short names of one or more capacity providers to associate with the cluster. Valid values also include FARGATE and FARGATE\_SPOT. | `list(string)` | `[]` | no |
 | <a name="input_create_launch_template"></a> [create\_launch\_template](#input\_create\_launch\_template) | Create a launch template | `bool` | `true` | no |
+| <a name="input_default_capacity_provider_strategy"></a> [default\_capacity\_provider\_strategy](#input\_default\_capacity\_provider\_strategy) | The capacity provider strategy to use by default for the cluster. Can be one or more. | `list(map(any))` | `[]` | no |
 | <a name="input_enable_execute_command"></a> [enable\_execute\_command](#input\_enable\_execute\_command) | Specifies whether to enable Amazon ECS Exec for the tasks within the service | `bool` | `false` | no |
 | <a name="input_launch_type"></a> [launch\_type](#input\_launch\_type) | The launch type on which to run your task.(EC2\|FARGATE) | `string` | `"EC2"` | no |
 | <a name="input_link_ecs_to_asg_capacity_provider"></a> [link\_ecs\_to\_asg\_capacity\_provider](#input\_link\_ecs\_to\_asg\_capacity\_provider) | Specify whether to link ECS to autoscaling group capacity provider | `bool` | `false` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name of the product/project/application | `string` | `""` | no |
 | <a name="input_platform_version"></a> [platform\_version](#input\_platform\_version) | Platform version (applicable for FARGATE launch type) | `string` | `"LATEST"` | no |
+| <a name="input_service_connect_configuration"></a> [service\_connect\_configuration](#input\_service\_connect\_configuration) | Configures a Service Connect | `map(string)` | `{}` | no |
+| <a name="input_service_connect_defaults"></a> [service\_connect\_defaults](#input\_service\_connect\_defaults) | Configures a Service Connect Namespace | `map(string)` | `{}` | no |
 | <a name="input_service_deployment_maximum_percent"></a> [service\_deployment\_maximum\_percent](#input\_service\_deployment\_maximum\_percent) | Upper limit (as a percentage of the service's desiredCount) of the number of running tasks that can be running in a service during a deployment. Not valid when using the DAEMON scheduling strategy. | `number` | `200` | no |
 | <a name="input_service_deployment_minimum_healthy_percent"></a> [service\_deployment\_minimum\_healthy\_percent](#input\_service\_deployment\_minimum\_healthy\_percent) | Lower limit (as a percentage of the service's desiredCount) of the number of running tasks that must remain running and healthy in a service during a deployment. | `number` | `100` | no |
 | <a name="input_service_map"></a> [service\_map](#input\_service\_map) | A map of services to deploy | `map(any)` | `{}` | no |
@@ -68,8 +72,6 @@ No resources.
 | <a name="input_service_target_cpu_value"></a> [service\_target\_cpu\_value](#input\_service\_target\_cpu\_value) | Autoscale when CPU Usage value over the specified value. Must be specified if `enable_cpu_based_autoscaling` is `true`. | `number` | `70` | no |
 | <a name="input_service_task_execution_role_arn"></a> [service\_task\_execution\_role\_arn](#input\_service\_task\_execution\_role\_arn) | Default IAM role for ECS execution | `string` | `""` | no |
 | <a name="input_service_task_role_arn"></a> [service\_task\_role\_arn](#input\_service\_task\_role\_arn) | Default IAM role for ECS task | `string` | `""` | no |
-| <a name="capacity_providers"></a> [capacity\_provider](#default\_capacity\_provider\_strategy) | Capacity providers for ECS Cluster | `list(string)` | `[]` | no |
-| <a name="default_capacity_provider_strategy"></a> [default\_capacity\_provider\_strategy](#default\_capacity\_provider\_strategy) | Default capacity provider strategy for ECS Cluster | `list(map(any))` | `[]` | no |
 | <a name="input_task_placement_constraints"></a> [task\_placement\_constraints](#input\_task\_placement\_constraints) | The rules that are taken into consideration during task placement. Maximum number of placement\_constraints is 10 | <pre>list(object({<br>    type       = string<br>    expression = string<br>  }))</pre> | `[]` | no |
 
 ## Outputs

@@ -137,6 +137,18 @@ variable "capacity_provider_strategy" {
   default     = []
 }
 
+variable "service_connect_configuration" {
+  description = "The ECS Service Connect configuration to discover and connect to services"
+  type        = map(any)
+  default     = {}
+}
+
+variable "service_connect_namespace" {
+  description = "Namespace in which ECS Service Connect to be created"
+  type        = string
+  default     = null
+}
+
 ################################################################################
 # ECS Task Definition
 ################################################################################
