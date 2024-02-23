@@ -43,6 +43,7 @@ module "cluster" {
   default_capacity_provider_strategy = var.default_capacity_provider_strategy
   capacity_providers                 = var.capacity_providers
   service_connect_defaults           = var.service_connect_defaults
+  tags                               = var.cluster_tags
 }
 
 module "service" {

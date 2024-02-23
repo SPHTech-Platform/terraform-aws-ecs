@@ -51,6 +51,7 @@ No resources.
 | <a name="input_asg_wait_for_capacity_timeout"></a> [asg\_wait\_for\_capacity\_timeout](#input\_asg\_wait\_for\_capacity\_timeout) | A maximum duration that Terraform should wait for ASG instances to be healthy before timing out. (See also Waiting for Capacity below.) Setting this to '0' causes Terraform to skip all Capacity Waiting behavior. | `string` | `null` | no |
 | <a name="input_assign_public_ip"></a> [assign\_public\_ip](#input\_assign\_public\_ip) | Enable a public IP address for the container | `bool` | `false` | no |
 | <a name="input_capacity_providers"></a> [capacity\_providers](#input\_capacity\_providers) | List of short names of one or more capacity providers to associate with the cluster. Valid values also include FARGATE and FARGATE\_SPOT. | `list(string)` | `[]` | no |
+| <a name="input_cluster_tags"></a> [cluster\_tags](#input\_cluster\_tags) | tags to be added to ECS cluster | `map(any)` | `{}` | no |
 | <a name="input_create_launch_template"></a> [create\_launch\_template](#input\_create\_launch\_template) | Create a launch template | `bool` | `true` | no |
 | <a name="input_default_capacity_provider_strategy"></a> [default\_capacity\_provider\_strategy](#input\_default\_capacity\_provider\_strategy) | The capacity provider strategy to use by default for the cluster. Can be one or more. | `list(map(any))` | `[]` | no |
 | <a name="input_enable_execute_command"></a> [enable\_execute\_command](#input\_enable\_execute\_command) | Specifies whether to enable Amazon ECS Exec for the tasks within the service | `bool` | `false` | no |
@@ -68,6 +69,7 @@ No resources.
 | <a name="input_service_scale_out_cooldown"></a> [service\_scale\_out\_cooldown](#input\_service\_scale\_out\_cooldown) | Time between scale out action | `number` | `300` | no |
 | <a name="input_service_security_groups"></a> [service\_security\_groups](#input\_service\_security\_groups) | Security group IDs to attach to your ECS Service | `list(string)` | `[]` | no |
 | <a name="input_service_subnets"></a> [service\_subnets](#input\_service\_subnets) | Private subnets for ECS | `list(string)` | `[]` | no |
+| <a name="input_service_tags"></a> [service\_tags](#input\_service\_tags) | tags to be added to task definitions | `map(any)` | `{}` | no |
 | <a name="input_service_target_cpu_value"></a> [service\_target\_cpu\_value](#input\_service\_target\_cpu\_value) | Autoscale when CPU Usage value over the specified value. Must be specified if `enable_cpu_based_autoscaling` is `true`. | `number` | `70` | no |
 | <a name="input_service_task_execution_role_arn"></a> [service\_task\_execution\_role\_arn](#input\_service\_task\_execution\_role\_arn) | Default IAM role for ECS execution | `string` | `""` | no |
 | <a name="input_service_task_role_arn"></a> [service\_task\_role\_arn](#input\_service\_task\_role\_arn) | Default IAM role for ECS task | `string` | `""` | no |

@@ -19,6 +19,12 @@ variable "link_ecs_to_asg_capacity_provider" {
   default     = false
 }
 
+variable "cluster_tags" {
+  type        = map(any)
+  default     = {}
+  description = "tags to be added to ECS cluster"
+}
+
 ##############################
 # ECS - service
 ##############################
@@ -87,6 +93,12 @@ variable "enable_execute_command" {
   description = "Specifies whether to enable Amazon ECS Exec for the tasks within the service"
   type        = bool
   default     = false
+}
+
+variable "service_tags" {
+  type        = map(any)
+  default     = {}
+  description = "tags to be added to task definitions"
 }
 
 ################################################################################
