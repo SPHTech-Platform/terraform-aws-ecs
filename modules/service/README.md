@@ -10,7 +10,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.38.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.18.1 |
 
 ## Modules
 
@@ -51,7 +51,7 @@ No modules.
 | <a name="input_platform_version"></a> [platform\_version](#input\_platform\_version) | Platform version (applicable for FARGATE launch type) | `string` | `"LATEST"` | no |
 | <a name="input_propagate_tags"></a> [propagate\_tags](#input\_propagate\_tags) | Specifies whether to propagate the tags from the task definition or the service to the tasks. The valid values are SERVICE and TASK\_DEFINITION | `string` | `"TASK_DEFINITION"` | no |
 | <a name="input_security_groups"></a> [security\_groups](#input\_security\_groups) | Security group IDs to attach to your ECS Service | `list(string)` | `null` | no |
-| <a name="input_service_connect_configuration"></a> [service\_connect\_configuration](#input\_service\_connect\_configuration) | The ECS Service Connect configuration to discover and connect to services | `map(any)` | `{}` | no |
+| <a name="input_service_connect_configuration"></a> [service\_connect\_configuration](#input\_service\_connect\_configuration) | The ECS Service Connect configuration to discover and connect to services | `any` | `{}` | no |
 | <a name="input_service_placement_constraints"></a> [service\_placement\_constraints](#input\_service\_placement\_constraints) | The rules that are taken into consideration during task placement. Maximum number of placement\_constraints is 10. | <pre>list(object({<br>    type       = string<br>    expression = string<br>  }))</pre> | `[]` | no |
 | <a name="input_service_registries"></a> [service\_registries](#input\_service\_registries) | Service discovery registries for the service. The maximum number of service\_registries blocks is 1 | `list(any)` | `[]` | no |
 | <a name="input_subnets"></a> [subnets](#input\_subnets) | Private subnets for ECS | `list(string)` | `null` | no |

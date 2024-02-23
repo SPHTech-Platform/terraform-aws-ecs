@@ -139,7 +139,7 @@ variable "capacity_provider_strategy" {
 
 variable "service_connect_configuration" {
   description = "The ECS Service Connect configuration to discover and connect to services"
-  type        = map(any)
+  type        = any
   default     = {}
 }
 
