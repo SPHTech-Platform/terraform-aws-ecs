@@ -120,7 +120,7 @@ resource "aws_ecs_service" "this" {
   }
 
   dynamic "service_connect_configuration" {
-    for_each = length(var.service_connect_configuration) > 0 ? [var.service_connect_configuration] : []
+    for_each = length(var.service_connect_configuration) > 0 ? var.service_connect_configuration : []
 
     content {
       enabled = try(service_connect_configuration.value.enabled, true)
