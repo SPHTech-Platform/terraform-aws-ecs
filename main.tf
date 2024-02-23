@@ -80,7 +80,6 @@ module "service" {
   capacity_provider_strategy = var.default_capacity_provider_strategy
 
   service_connect_configuration = length(var.service_connect_defaults) > 0 ? var.service_connect_configuration : {}
-  service_connect_namespace     = length(var.service_connect_defaults) > 0 && length(var.service_connect_configuration) > 0 ? module.cluster.ecs_service_connect_namespace_arn : null
 }
 
 module "service_cpu_autoscaling_policy" {

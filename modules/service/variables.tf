@@ -143,12 +143,6 @@ variable "service_connect_configuration" {
   default     = {}
 }
 
-variable "service_connect_namespace" {
-  description = "Namespace in which ECS Service Connect to be created"
-  type        = string
-  default     = null
-}
-
 ################################################################################
 # ECS Task Definition
 ################################################################################

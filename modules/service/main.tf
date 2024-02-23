@@ -143,7 +143,7 @@ resource "aws_ecs_service" "this" {
         }
       }
 
-      namespace = lookup(service_connect_configuration.value, "namespace", var.service_connect_namespace)
+      namespace = lookup(service_connect_configuration.value, "namespace", null)
 
       dynamic "service" {
         for_each = try([service_connect_configuration.value.service], [])

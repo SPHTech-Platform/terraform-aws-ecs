@@ -26,7 +26,6 @@ No modules.
 | [aws_ecs_cluster_capacity_providers.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_cluster_capacity_providers) | resource |
 | [aws_kms_key.cloudwatch](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_kms_key.cluster](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
-| [aws_service_discovery_http_namespace.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/service_discovery_http_namespace) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.cloudwatch_logs_allow_kms](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
@@ -66,5 +65,4 @@ No modules.
 | <a name="output_ecs_cluster_id"></a> [ecs\_cluster\_id](#output\_ecs\_cluster\_id) | ID of the ECS Cluster |
 | <a name="output_ecs_cluster_kms_arn"></a> [ecs\_cluster\_kms\_arn](#output\_ecs\_cluster\_kms\_arn) | The AWS Key Management Service key ID to encrypt the data between the local client and the container |
 | <a name="output_ecs_cluster_name"></a> [ecs\_cluster\_name](#output\_ecs\_cluster\_name) | The name of the ECS cluster |
-| <a name="output_ecs_service_connect_namespace_arn"></a> [ecs\_service\_connect\_namespace\_arn](#output\_ecs\_service\_connect\_namespace\_arn) | ARN of ECS Service Connect Namespace |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
