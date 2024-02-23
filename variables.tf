@@ -89,12 +89,6 @@ variable "enable_execute_command" {
   default     = false
 }
 
-variable "service_connect_configuration" {
-  description = "Configures a Service Connect"
-  type        = map(string)
-  default     = {}
-}
-
 ################################################################################
 # Autoscaling group
 ################################################################################

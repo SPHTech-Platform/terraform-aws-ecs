@@ -79,7 +79,7 @@ module "service" {
 
   capacity_provider_strategy = var.default_capacity_provider_strategy
 
-  service_connect_configuration = length(var.service_connect_defaults) > 0 ? var.service_connect_configuration : {}
+  service_connect_configuration = length(var.service_connect_defaults) > 0 ? try(each.value.service_connect_configuration, {}) : {}
 }
 
 module "service_cpu_autoscaling_policy" {
