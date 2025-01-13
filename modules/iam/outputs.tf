@@ -10,12 +10,12 @@ output "iam_role_name" {
 
 output "iam_instance_profile_arn" {
   description = "ARN of IAM instance profile"
-  value       = try(aws_iam_instance_profile.iam_instance_role.arn, "")
+  value       = try(aws_iam_instance_profile.iam_instance_role[0].arn, "")
 }
 
 output "iam_instance_profile_name" {
   description = "Name of IAM instance profile"
-  value       = try(aws_iam_instance_profile.iam_instance_role.name, "")
+  value       = try(aws_iam_instance_profile.iam_instance_role[0].name, "")
 }
 
 output "iam_policy_id" {
