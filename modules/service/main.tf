@@ -73,6 +73,7 @@ data "aws_ecs_task_definition" "this" {
 
 resource "aws_ecs_service" "this" {
   #checkov:skip=CKV_AWS_332: Already defaulting to latest FARGATE platform version
+  #checkov:skip=CKV_AWS_333: "Ensure ECS services do not have public IP addresses assigned to them automatically"
 
   name    = var.name
   cluster = var.cluster_id

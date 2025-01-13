@@ -13,7 +13,7 @@ resource "aws_iam_instance_profile" "iam_instance_role" {
 
   name = var.role_name
   path = "/"
-  role = aws_iam_role.iam_assumable_role.name
+  role = aws_iam_role.iam_role.name
 
   tags = var.tags
 }
@@ -33,6 +33,6 @@ module "iam_policy" {
 resource "aws_iam_role_policy_attachment" "attach" {
   count = length(var.policy) > 0 ? 1 : 0
 
-  role       = module.iam_assumable_role.iam_role_name
+  role       = aws_iam_role.iam_role.name
   policy_arn = module.iam_policy.arn
 }
