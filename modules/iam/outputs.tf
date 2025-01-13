@@ -1,21 +1,21 @@
 output "iam_role_arn" {
   description = "ARN of IAM role"
-  value       = try(module.iam_assumable_role.iam_role_arn, "")
+  value       = try(aws_iam_role.iam_role.arn, "")
 }
 
 output "iam_role_name" {
   description = "Name of IAM role"
-  value       = try(module.iam_assumable_role.iam_role_name, "")
+  value       = try(aws_iam_role.iam_role.name, "")
 }
 
 output "iam_instance_profile_arn" {
   description = "ARN of IAM instance profile"
-  value       = try(module.iam_assumable_role.iam_instance_profile_arn, "")
+  value       = try(aws_iam_instance_profile.iam_instance_role[0].arn, "")
 }
 
 output "iam_instance_profile_name" {
   description = "Name of IAM instance profile"
-  value       = try(module.iam_assumable_role.iam_instance_profile_name, "")
+  value       = try(aws_iam_instance_profile.iam_instance_role[0].name, "")
 }
 
 output "iam_policy_id" {
