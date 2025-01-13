@@ -1,18 +1,21 @@
-module "iam_assumable_role" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-assumable-role"
-  version = "~> 4.13.0"
+resource "aws_iam_role" "iam_role" {
+  name = var.role_name
 
-  trusted_role_arns       = var.trusted_role_arns
-  trusted_role_services   = var.trusted_role_services
-  custom_role_policy_arns = var.custom_role_policy_arns
-
-  create_role             = true
-  create_instance_profile = var.create_instance_profile
-  role_requires_mfa       = false
-
-  role_name = var.role_name
+  force_detach_policies = true
+  assume_role_policy    = data.aws_iam_policy_document.assume_role_policy.json
+  managed_policy_arns   = var.custom_role_policy_arns
 
   tags = merge(var.tags, { "Name" = var.role_name })
+}
+
+resource "aws_iam_instance_profile" "iam_instance_role" {
+  count = var.create_instance_profile ? 1 : 0
+
+  name = var.role_name
+  path = "/"
+  role = aws_iam_role.iam_assumable_role.name
+
+  tags = var.tags
 }
 
 module "iam_policy" {
