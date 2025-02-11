@@ -1,6 +1,6 @@
 locals {
   log_group_name = var.log_group_name == "" ? "/aws/ecs/ecs-${var.name}" : var.log_group_name
-  asg_cap_name   = "asg-${var.name}"
+  asg_cap_name   = "asg-ecs-${var.name}"
 }
 
 resource "aws_cloudwatch_log_group" "this" {
