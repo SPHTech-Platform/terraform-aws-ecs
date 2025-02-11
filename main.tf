@@ -54,6 +54,7 @@ module "service" {
   cluster_id            = module.cluster.ecs_cluster_id
   container_definitions = each.value.service_container_definitions
   launch_type           = var.launch_type
+  network_mode          = var.network_mode
   task_cpu              = each.value.service_task_cpu
   task_memory           = each.value.service_task_memory
   desired_count         = each.value.service_desired_count

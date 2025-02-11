@@ -65,6 +65,12 @@ variable "service_security_groups" {
   default     = []
 }
 
+variable "network_mode" {
+  description = "Networking Mode Type"
+  type        = string
+  default     = "awsvpc"
+}
+
 variable "service_deployment_maximum_percent" {
   description = "Upper limit (as a percentage of the service's desiredCount) of the number of running tasks that can be running in a service during a deployment. Not valid when using the DAEMON scheduling strategy."
   type        = number
