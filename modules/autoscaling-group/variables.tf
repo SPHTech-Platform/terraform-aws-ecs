@@ -76,7 +76,7 @@ variable "create_launch_template" {
   default     = true
 }
 
-variable "launch_template" {
+variable "launch_template_id" {
   description = "Name of an existing launch template to be used (created outside of this module)"
   type        = string
   default     = null
