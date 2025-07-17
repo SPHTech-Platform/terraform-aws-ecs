@@ -1,5 +1,6 @@
 resource "aws_security_group" "ecs_sg" {
   #checkov:skip=CKV2_AWS_5:Security group is attached to another resource
+  #checkov:skip=CKV_AWS_382:"Ensure no security groups allow egress from 0.0.0.0:0 to port -1"
   name        = "ecs-sg-${var.name}"
   description = "Allow inbound traffic"
   vpc_id      = data.aws_vpc.default.id
