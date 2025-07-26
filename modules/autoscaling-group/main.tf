@@ -30,7 +30,7 @@ module "asg" {
   ebs_optimized     = var.ebs_optimized
   enable_monitoring = var.enable_monitoring
   enabled_metrics   = var.enabled_metrics
-  user_data_base64  = var.user_data_base64
+  user_data         = var.user_data_base64
 
   iam_instance_profile_arn = var.iam_instance_profile_arn
 
