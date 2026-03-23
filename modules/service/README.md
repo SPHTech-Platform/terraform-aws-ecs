@@ -10,7 +10,7 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 5.38.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.0 |
 
 ## Modules
 
@@ -32,6 +32,7 @@ No modules.
 | <a name="input_capacity_provider_strategy"></a> [capacity\_provider\_strategy](#input\_capacity\_provider\_strategy) | The capacity provider strategy to use by ecs service. Can be one or more. | `list(map(any))` | `[]` | no |
 | <a name="input_cluster_id"></a> [cluster\_id](#input\_cluster\_id) | Cluster ID | `string` | n/a | yes |
 | <a name="input_container_definitions"></a> [container\_definitions](#input\_container\_definitions) | A list of container definitions in JSON format that describe the different containers that make up your task | `string` | n/a | yes |
+| <a name="input_create_service"></a> [create\_service](#input\_create\_service) | Whether to create the ECS service | `bool` | `true` | no |
 | <a name="input_deployment_circuit_breaker"></a> [deployment\_circuit\_breaker](#input\_deployment\_circuit\_breaker) | Configuration block for deployment circuit breaker | `any` | `{}` | no |
 | <a name="input_deployment_controller_type"></a> [deployment\_controller\_type](#input\_deployment\_controller\_type) | Type of deployment controller. Valid values are `CODE_DEPLOY` and `ECS` | `string` | `"ECS"` | no |
 | <a name="input_deployment_maximum_percent"></a> [deployment\_maximum\_percent](#input\_deployment\_maximum\_percent) | Upper limit (as a percentage of the service's desiredCount) of the number of running tasks that can be running in a service during a deployment. Not valid when using the DAEMON scheduling strategy. | `number` | `200` | no |
@@ -47,17 +48,17 @@ No modules.
 | <a name="input_launch_type"></a> [launch\_type](#input\_launch\_type) | Launch type | `string` | `"EC2"` | no |
 | <a name="input_name"></a> [name](#input\_name) | The Service name | `string` | n/a | yes |
 | <a name="input_network_mode"></a> [network\_mode](#input\_network\_mode) | Networking Mode Type | `string` | `"awsvpc"` | no |
-| <a name="input_ordered_placement_strategy"></a> [ordered\_placement\_strategy](#input\_ordered\_placement\_strategy) | Service level strategy rules that are taken into consideration during task placement. | <pre>list(object({<br>    type  = string<br>    field = string<br>  }))</pre> | `[]` | no |
+| <a name="input_ordered_placement_strategy"></a> [ordered\_placement\_strategy](#input\_ordered\_placement\_strategy) | Service level strategy rules that are taken into consideration during task placement. | <pre>list(object({<br/>    type  = string<br/>    field = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_platform_version"></a> [platform\_version](#input\_platform\_version) | Platform version (applicable for FARGATE launch type) | `string` | `"LATEST"` | no |
 | <a name="input_propagate_tags"></a> [propagate\_tags](#input\_propagate\_tags) | Specifies whether to propagate the tags from the task definition or the service to the tasks. The valid values are SERVICE and TASK\_DEFINITION | `string` | `"TASK_DEFINITION"` | no |
 | <a name="input_security_groups"></a> [security\_groups](#input\_security\_groups) | Security group IDs to attach to your ECS Service | `list(string)` | `null` | no |
-| <a name="input_service_placement_constraints"></a> [service\_placement\_constraints](#input\_service\_placement\_constraints) | The rules that are taken into consideration during task placement. Maximum number of placement\_constraints is 10. | <pre>list(object({<br>    type       = string<br>    expression = string<br>  }))</pre> | `[]` | no |
+| <a name="input_service_placement_constraints"></a> [service\_placement\_constraints](#input\_service\_placement\_constraints) | The rules that are taken into consideration during task placement. Maximum number of placement\_constraints is 10. | <pre>list(object({<br/>    type       = string<br/>    expression = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_service_registries"></a> [service\_registries](#input\_service\_registries) | Service discovery registries for the service. The maximum number of service\_registries blocks is 1 | `list(any)` | `[]` | no |
 | <a name="input_subnets"></a> [subnets](#input\_subnets) | Private subnets for ECS | `list(string)` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags for ECS cluster | `map(string)` | `{}` | no |
 | <a name="input_task_cpu"></a> [task\_cpu](#input\_task\_cpu) | Number of cpu units used by the task. If the requires\_compatibilities is FARGATE this field is required. | `number` | `256` | no |
 | <a name="input_task_memory"></a> [task\_memory](#input\_task\_memory) | Amount (in MiB) of memory used by the task. If the requires\_compatibilities is FARGATE this field is required. | `number` | `512` | no |
-| <a name="input_task_placement_constraints"></a> [task\_placement\_constraints](#input\_task\_placement\_constraints) | The rules that are taken into consideration during task placement. Maximum number of placement\_constraints is 10 | <pre>list(object({<br>    type       = string<br>    expression = string<br>  }))</pre> | `[]` | no |
+| <a name="input_task_placement_constraints"></a> [task\_placement\_constraints](#input\_task\_placement\_constraints) | The rules that are taken into consideration during task placement. Maximum number of placement\_constraints is 10 | <pre>list(object({<br/>    type       = string<br/>    expression = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_task_role_arn"></a> [task\_role\_arn](#input\_task\_role\_arn) | Task role arn | `string` | `""` | no |
 
 ## Outputs
