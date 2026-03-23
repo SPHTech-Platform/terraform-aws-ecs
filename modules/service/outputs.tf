@@ -9,5 +9,5 @@ output "ecs_service_name" {
 }
 output "aws_ecs_task_definition" {
   description = "ARN of the ECS service"
-  value       = try(aws_ecs_task_definition.this[0].arn, "")
+  value       = try(aws_ecs_task_definition.this.arn, "")
 }
