@@ -6,6 +6,13 @@ variable "name" {
 ################################################################################
 # ECS Service
 ################################################################################
+
+variable "create_service" {
+  description = "Whether to create the ECS service"
+  type        = bool
+  default     = true
+}
+
 variable "cluster_id" {
   description = "Cluster ID"
   type        = string
