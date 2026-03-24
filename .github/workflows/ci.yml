@@ -10,9 +10,7 @@ permissions:
 
 jobs:
   ci:
-    uses: SPHTech-Platform/platform-reusable-workflow/.github/workflows/terraform.yaml@main
+    uses: SPHTech-Platform/reusable-workflows/.github/workflows/terraform.yaml@main
     with:
       upload_sarif: false
       checkov_skip_check: CKV_TF_1,CKV_AWS_338
-      runner_label: platform-eng-ent-v2-dual
-    secrets: inherit
