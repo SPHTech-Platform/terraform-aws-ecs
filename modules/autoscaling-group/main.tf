@@ -1,6 +1,6 @@
 module "asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
-  version = "~> 5.1"
+  version = "~> 9.0"
 
   create = var.create && var.launch_type == "EC2"
 
@@ -20,7 +20,7 @@ module "asg" {
 
   # Launch template
   create_launch_template      = var.create_launch_template && var.launch_type == "EC2"
-  launch_template             = var.launch_template
+  launch_template_id          = var.launch_template_id
   launch_template_name        = "lt-${var.name}"
   launch_template_description = var.launch_template_description
   update_default_version      = true
@@ -30,7 +30,7 @@ module "asg" {
   ebs_optimized     = var.ebs_optimized
   enable_monitoring = var.enable_monitoring
   enabled_metrics   = var.enabled_metrics
-  user_data_base64  = var.user_data_base64
+  user_data         = var.user_data_base64
 
   iam_instance_profile_arn = var.iam_instance_profile_arn
 
