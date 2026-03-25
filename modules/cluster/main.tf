@@ -51,7 +51,7 @@ resource "aws_ecs_cluster_capacity_providers" "this" {
   capacity_providers = var.link_ecs_to_asg_capacity_provider ? [try(aws_ecs_capacity_provider.this[0].name, null)] : var.capacity_providers
 
   dynamic "default_capacity_provider_strategy" {
-    for_each = length(var.asg_arn) == 0 ? var.default_capacity_provider_strategy : []
+    for_each = var.asg_arn == null ? var.default_capacity_provider_strategy : []
 
     iterator = strategy
     content {
