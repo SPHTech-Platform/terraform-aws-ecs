@@ -1,6 +1,6 @@
 module "asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
-  version = "~> 9.0"
+  version = "~> 8.3.1"
 
   create = var.create && var.launch_type == "EC2"
 
