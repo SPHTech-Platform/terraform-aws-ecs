@@ -11,9 +11,9 @@ No providers.
 
 ## Modules
 
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_asg"></a> [asg](#module\_asg) | terraform-aws-modules/autoscaling/aws | ~> 9.0 |
+| Name | Source | Version  |
+|------|--------|----------|
+| <a name="module_asg"></a> [asg](#module\_asg) | terraform-aws-modules/autoscaling/aws | ~> 8.3.1 |
 
 ## Resources
 
