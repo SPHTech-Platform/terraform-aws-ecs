@@ -37,6 +37,18 @@ variable "log_retention" {
   default     = 30
 }
 
+variable "execute_command_log_group_name" {
+  description = "Existing CloudWatch log group for ECS Exec session logs. Defaults to the log group created by this module"
+  type        = string
+  default     = null
+}
+
+variable "execute_command_kms_encryption" {
+  description = "Encrypt ECS Exec session data with the module KMS key and require an encrypted log group. Set to false when the task role has no access to the module KMS key or the log group is not KMS encrypted"
+  type        = bool
+  default     = true
+}
+
 ################################################################################
 # ECS Capacity Provider
 ################################################################################
