@@ -42,6 +42,8 @@ module "cluster" {
 
   default_capacity_provider_strategy = var.default_capacity_provider_strategy
   capacity_providers                 = var.capacity_providers
+  execute_command_log_group_name     = var.execute_command_log_group_name
+  execute_command_kms_encryption     = var.execute_command_kms_encryption
   tags                               = var.cluster_tags
 }
 
