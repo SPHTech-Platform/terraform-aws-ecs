@@ -1,6 +1,8 @@
 locals {
   log_group_name = var.log_group_name == "" ? "/aws/ecs/ecs-${var.name}" : var.log_group_name
   asg_cap_name   = "asg-ecs-${var.name}"
+
+  execute_command_log_group_name = coalesce(var.execute_command_log_group_name, try(aws_cloudwatch_log_group.this[0].name, null))
 }
 
 resource "aws_cloudwatch_log_group" "this" {
@@ -71,11 +73,11 @@ resource "aws_ecs_cluster" "this" {
 
   configuration {
     execute_command_configuration {
-      kms_key_id = aws_kms_key.cluster.arn
+      kms_key_id = var.execute_command_kms_encryption ? aws_kms_key.cluster.arn : null
       logging    = "OVERRIDE"
       log_configuration {
-        cloud_watch_encryption_enabled = var.ecs_encrypt_logs
-        cloud_watch_log_group_name     = aws_cloudwatch_log_group.this[0].name
+        cloud_watch_encryption_enabled = var.execute_command_kms_encryption && var.ecs_encrypt_logs
+        cloud_watch_log_group_name     = local.execute_command_log_group_name
       }
     }
   }

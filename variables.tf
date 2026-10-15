@@ -19,6 +19,18 @@ variable "cluster_tags" {
   description = "tags to be added to ECS cluster"
 }
 
+variable "execute_command_log_group_name" {
+  description = "Existing CloudWatch log group for ECS Exec session logs. Defaults to the log group created by the cluster module"
+  type        = string
+  default     = null
+}
+
+variable "execute_command_kms_encryption" {
+  description = "Use the cluster module KMS key for ECS Exec session data and CloudWatch log encryption. Set to false when the task role has no access to that key or the log group is not KMS encrypted"
+  type        = bool
+  default     = true
+}
+
 ##############################
 # ECS - service
 ##############################

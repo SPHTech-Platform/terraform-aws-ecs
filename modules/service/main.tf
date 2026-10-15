@@ -175,3 +175,9 @@ resource "aws_ecs_service" "this" {
   tags = var.tags
 
 }
+
+# create_service (v0.2.21) added count; keeps services created by earlier versions in place.
+moved {
+  from = aws_ecs_service.this
+  to   = aws_ecs_service.this[0]
+}
