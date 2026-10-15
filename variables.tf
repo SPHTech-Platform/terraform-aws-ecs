@@ -26,7 +26,7 @@ variable "execute_command_log_group_name" {
 }
 
 variable "execute_command_kms_encryption" {
-  description = "Encrypt ECS Exec session data with the cluster module KMS key and require an encrypted log group. Set to false when the task role has no access to that key or the log group is not KMS encrypted"
+  description = "Use the cluster module KMS key for ECS Exec session data and CloudWatch log encryption. Set to false when the task role has no access to that key or the log group is not KMS encrypted"
   type        = bool
   default     = true
 }
