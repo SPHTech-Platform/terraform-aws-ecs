@@ -31,6 +31,12 @@ variable "execute_command_kms_encryption" {
   default     = true
 }
 
+variable "log_retention" {
+  description = "Retention in days of the CloudWatch log group the cluster module creates (/aws/ecs/ecs-<name>)"
+  type        = number
+  default     = 30
+}
+
 ##############################
 # ECS - service
 ##############################
